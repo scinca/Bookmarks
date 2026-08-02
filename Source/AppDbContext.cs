@@ -1,5 +1,6 @@
 using Bookmarks.Features.BookmarkGroups;
 using Bookmarks.Features.Bookmarks;
+using Bookmarks.Features.User;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +15,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+        
 
         builder.Entity<BookmarkGroup>(entity =>
         {
@@ -25,11 +27,19 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
                   .HasDefaultValueSql("CURRENT_TIMESTAMP")
                   .IsRequired();
             
+            
+            entity.HasOne(e => e.Owner)
+                .WithMany()
+                .HasForeignKey(e => e.OwnerId)
+                .OnDelete(DeleteBehavior.Cascade);
+                
             entity.HasMany(e => e.Bookmarks)
                   .WithOne(e => e.Group)
                   .HasForeignKey(e => e.GroudId)
                   .OnDelete(DeleteBehavior.Cascade);
-            
+
+            entity.HasIndex(e => new { e.Name });
+
             // TODO: Default Query Filter on UserId
         });
     }
