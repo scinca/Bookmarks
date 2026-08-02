@@ -1,6 +1,20 @@
+using Bookmarks.Features.User;
+using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
+builder.Services.AddAuthorization();
+builder.Services
+       .AddIdentityApiEndpoints<ApplicationUser>()
+       .AddEntityFrameworkStores<AppDbContext>();
+    
+
 builder.Services
    .AddFastEndpoints(DiscoveredTypes.All)
    .OpenApiDocument();
@@ -8,6 +22,8 @@ builder.Services
 
 
 var app = builder.Build();
+
+app.MapGroup("api/auth").MapIdentityApi<ApplicationUser>().WithTags("ignore", "auth");
 
 app.UseAuthentication()
    .UseAuthorization()
