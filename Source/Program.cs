@@ -1,0 +1,21 @@
+using Scalar.AspNetCore;
+
+var bld = WebApplication.CreateBuilder(args);
+bld.Services
+   .AddAuthenticationJwtBearer(s => s.SigningKey = bld.Configuration["Auth:JwtKey"])
+   .AddAuthorization()
+   .AddFastEndpoints(DiscoveredTypes.All)
+   .OpenApiDocument();
+
+var app = bld.Build();
+app.UseAuthentication()
+   .UseAuthorization()
+   .UseFastEndpoints(
+       c =>
+       {
+           c.Binding.ReflectionCache.AddFromBookmarks();
+           c.Errors.UseProblemDetails();
+       });
+app.MapOpenApi();
+app.MapScalarApiReference(o => o.AddDocuments("v1"));
+app.Run();
