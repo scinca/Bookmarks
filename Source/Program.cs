@@ -1,13 +1,14 @@
 using Scalar.AspNetCore;
 
-var bld = WebApplication.CreateBuilder(args);
-bld.Services
-   .AddAuthenticationJwtBearer(s => s.SigningKey = bld.Configuration["Auth:JwtKey"])
-   .AddAuthorization()
+var builder = WebApplication.CreateBuilder(args);
+builder.Services
    .AddFastEndpoints(DiscoveredTypes.All)
    .OpenApiDocument();
 
-var app = bld.Build();
+
+
+var app = builder.Build();
+
 app.UseAuthentication()
    .UseAuthorization()
    .UseFastEndpoints(
