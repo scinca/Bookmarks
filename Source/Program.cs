@@ -18,7 +18,10 @@ builder.Services
 
 builder.Services
    .AddFastEndpoints(DiscoveredTypes.All)
-   .OpenApiDocument();
+   .OpenApiDocument(options =>
+   {
+       options.ExcludeNonFastEndpoints = true;
+   });
 
 
 builder.Services.AddHttpContextAccessor();
