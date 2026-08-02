@@ -52,7 +52,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, ICurrentUserSe
         });
     #endregion
         
-   #region Bookmark
+    #region Bookmark
         builder.Entity<Bookmark>(entity =>
         {
             entity.Property(e => e.Name)
