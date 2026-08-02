@@ -1,4 +1,5 @@
 using Bookmarks.Features.User;
+using Bookmarks.Features.User.Services;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
@@ -20,6 +21,8 @@ builder.Services
    .OpenApiDocument();
 
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 var app = builder.Build();
 
