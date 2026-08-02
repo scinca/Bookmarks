@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 using Bookmarks.Features.Bookmarks;
 using Bookmarks.Features.User;
 
-namespace Bookmarks.Features.BookmarkGroup;
+namespace Bookmarks.Features.BookmarkGroups;
 
 public class BookmarkGroup
 {
