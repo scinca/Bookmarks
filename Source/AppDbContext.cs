@@ -1,15 +1,18 @@
 using Bookmarks.Features.BookmarkGroups;
 using Bookmarks.Features.Bookmarks;
+using Bookmarks.Features.User.Services;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bookmarks;
 
 
-public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext(options)
+public class AppDbContext(DbContextOptions<AppDbContext> options, ICurrentUserService currentUser) : IdentityDbContext(options)
 {
     public DbSet<Bookmark> Bookmarks {get; set;}
     public DbSet<BookmarkGroup> BookmarkGroups {get; set;}
+
+ 
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -45,7 +48,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
             entity.HasIndex(e => new { e.Name })
                   .IsUnique();
 
-            // TODO: Default Query Filter on UserId
+            entity.HasQueryFilter(e => e.OwnerId == currentUser.Id);
         });
     #endregion
         
@@ -87,6 +90,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
 
             entity.HasIndex(e => new { e.Name, e.Url })
                   .IsUnique();
+            
+            entity.HasQueryFilter(e => e.OwnerId == currentUser.Id);
         });
     #endregion
 
