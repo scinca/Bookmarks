@@ -7,31 +7,30 @@ public class Endpoint(AppDbContext context) : Endpoint<Request, Response>
     
     public override void Configure()
     {
-        Get("/groups/{Id:int}");
-        AllowAnonymous();
+        Get("/group/{Id:int}");
     }
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
         var group = await context
-                          .BookmarkGroups.
-                                  AsNoTracking()
-                                  .Select(g => new Response
-                                  {
-                                      Id = g.Id,
-                                      Name = g.Name,
-                                      Description = g.Description,
-                                      CreatedAt =  g.CreatedAt,
-                                      Bookmarks = g.Bookmarks.Select(b => new BookmarkOverview
-                                      {
-                                          Id = b.Id,
-                                          Name = b.Name,
-                                          Url = b.Url,
-                                          IsFavourite = b.IsFavourite
-                                      }).ToList()
-                                  })
-                                  .FirstOrDefaultAsync(g => g.Id == req.Id,
-                                      cancellationToken: ct);
+                          .BookmarkGroups
+                                 .AsNoTracking()
+                                 .Where(g => g.Id == req.Id)
+                                 .Select(g => new Response
+                                 {
+                                     Id = g.Id,
+                                     Name = g.Name,
+                                     Description = g.Description,
+                                     CreatedAt =  g.CreatedAt,
+                                     Bookmarks = g.Bookmarks.Select(b => new BookmarkOverview
+                                     {
+                                         Id = b.Id,
+                                         Name = b.Name,
+                                         Url = b.Url,
+                                         IsFavourite = b.IsFavourite
+                                     }).ToList()
+                                 })
+                                 .FirstOrDefaultAsync(cancellationToken: ct);
 
 
         if (group is null)
