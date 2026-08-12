@@ -15,8 +15,16 @@
         <PackageReference Include="FastEndpoints.Security" Version="8.2.0" />
         <PackageReference Include="FastEndpoints.OpenApi" Version="8.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.10" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.11">
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+          <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.10" />
         <PackageReference Include="Scalar.AspNetCore" Version="2.16.5" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Features\BookmarkGroups\Endpoints\GetAll\" />
     </ItemGroup>
 
 </Project>
