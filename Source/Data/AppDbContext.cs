@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Bookmarks;
 
 
-internal class AppDbContext(DbContextOptions<AppDbContext> options, ICurrentUserService currentUser) : IdentityDbContext(options)
+public class AppDbContext(DbContextOptions<AppDbContext> options, ICurrentUserService currentUser) : IdentityDbContext(options)
 {
     public DbSet<Bookmark> Bookmarks {get; set;}
     public DbSet<BookmarkGroup> BookmarkGroups {get; set;}
@@ -42,7 +42,7 @@ internal class AppDbContext(DbContextOptions<AppDbContext> options, ICurrentUser
                 
             entity.HasMany(e => e.Bookmarks)
                   .WithOne(e => e.Group)
-                  .HasForeignKey(e => e.GroudId)
+                  .HasForeignKey(e => e.GroupId)
                   .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasIndex(e => new { e.Name })
