@@ -3,7 +3,27 @@ static class QueryExtensions
 { 
     extension<TEntity>(IQueryable<TEntity> query)
     {
-        internal IQueryable<TEntity> Paginate(int page, int pageSize)
-            => query.Skip((page - 1) * pageSize).Take(pageSize);
+        /// <summary>
+        ///  Implements pagination to limit the amount of bookmarks returned.
+        /// </summary>
+        /// <remarks>
+        /// Always use an OrderBy before using this method
+        /// </remarks>
+        /// <param name="page">The number of the page, defaults to one</param>
+        /// <param name="pageSize">The size of the page, see <see cref="PageSize"/> for the different options</param>
+        /// <returns> An <see cref="IQueryable{TEntity}"/> to chain LINQ methods </returns>
+        internal IQueryable<TEntity> Paginate(int page = 1, PageSize pageSize = PageSize.Normal)
+        {
+            var sizeAsInt = (int) pageSize;
+            return query.Skip((page - 1) * sizeAsInt).Take(sizeAsInt);
+        }
+             
     }
+}
+
+public enum PageSize
+{
+    Small = 20,
+    Normal = 50,
+    Large = 100
 }
