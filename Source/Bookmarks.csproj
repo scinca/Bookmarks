@@ -27,7 +27,6 @@
     <ItemGroup>
       <Folder Include="Features\Bookmarks\Endpoints\Create\" />
       <Folder Include="Features\Bookmarks\Endpoints\Delete\" />
-      <Folder Include="Features\Bookmarks\Endpoints\GetAll\" />
       <Folder Include="Features\Bookmarks\Endpoints\Update\" />
     </ItemGroup>
 

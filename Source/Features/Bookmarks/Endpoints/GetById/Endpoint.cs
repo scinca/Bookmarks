@@ -1,14 +1,42 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace Bookmarks.Features.Bookmarks.Endpoints.GetById;
 
 public class Endpoint(AppDbContext context) : Endpoint<Request, Response>
 {
     public override void Configure()
     {
-        Get("/bookmark");
+        Get("/bookmark/{Id:int}");
     }
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
-        await Send.NoContentAsync(cancellation: ct);
+        var bookmark = await context.Bookmarks
+                                    .AsNoTracking()
+                                    .IgnoreQueryFilters([QueryFilters.ArchivedFilter, QueryFilters.SoftDeletionFilter])
+                                    .Where(b => b.Id == req.Id)
+                                    .Select(b => new Response
+                                    {
+                                        Id = b.Id,
+                                        Name = b.Name,
+                                        Url = b.Url,
+                                        Description = b.Description,
+                                        IsArchived =  b.IsArchived,
+                                        IsFavourite = b.IsFavourite,
+                                        IsDeleted = b.IsDeleted,
+                                        CreatedAt = b.CreatedAt,
+                                        LastModifiedAt = b.LastModifiedAt,
+                                        GroupId = b.GroupId
+                                    })
+                                    .FirstOrDefaultAsync(cancellationToken: ct);
+
+        if (bookmark is null)
+        {
+            await Send.NotFoundAsync(cancellation: ct);
+        }
+        else
+        {
+            await Send.OkAsync(response: bookmark, cancellation: ct);
+        }
     }
 }
