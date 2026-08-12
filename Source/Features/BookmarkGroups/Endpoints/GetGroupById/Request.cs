@@ -14,8 +14,7 @@ public class RequestValidator : Validator<Request>
     public RequestValidator()
     {
         RuleFor(x => x.Id)
-            .NotEmpty() // Not empty also checks for the default int value 0.
-            .WithMessage("Id must be provided and greater than 0");
+            .GreaterThan(0).WithMessage("Id must be provided and greater than 0");
         
     }
 }
