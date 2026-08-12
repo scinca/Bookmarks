@@ -74,6 +74,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, ICurrentUserSe
             entity.Property(e => e.IsFavourite)
                   .IsRequired()
                   .HasDefaultValue(false);
+            
+            entity.Property(e => e.IsDeleted)
+                  .IsRequired()
+                  .HasDefaultValue(false);
 
             entity.Property(e => e.CreatedAt)
                   .IsRequired()

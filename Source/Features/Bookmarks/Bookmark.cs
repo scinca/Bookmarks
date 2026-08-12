@@ -14,6 +14,8 @@ public class Bookmark
     public bool IsArchived {get; set;}
     public bool IsFavourite {get; set;}
     
+    public bool IsDeleted {get; set;}
+    
     public DateTime CreatedAt {get; init;}
     public DateTime LastModifiedAt {get; set;}
     
