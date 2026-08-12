@@ -7,7 +7,7 @@ public class Endpoint(AppDbContext context, ICurrentUserService currentUser): En
 {
     public override void Configure()
     {
-        Post("/groups");
+        Post("/group");
     }
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
