@@ -7,7 +7,7 @@ public class Endpoint(AppDbContext context) : Endpoint<Request, Response>
     
     public override void Configure()
     {
-        Get("/group/{Id:int}");
+        Get("/group/{GroupId:int}");
     }
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
