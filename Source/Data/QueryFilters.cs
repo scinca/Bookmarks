@@ -1,6 +1,6 @@
 namespace Bookmarks;
 
-public static class QueryFilters
+static class QueryFilters
 {
     public const string UserFilter = "A";
     public const string SoftDeletionFilter = "B";

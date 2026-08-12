@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Bookmarks;
 
 
-public class AppDbContext(DbContextOptions<AppDbContext> options, ICurrentUserService currentUser) : IdentityDbContext(options)
+internal class AppDbContext(DbContextOptions<AppDbContext> options, ICurrentUserService currentUser) : IdentityDbContext(options)
 {
     public DbSet<Bookmark> Bookmarks {get; set;}
     public DbSet<BookmarkGroup> BookmarkGroups {get; set;}
@@ -98,10 +98,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, ICurrentUserSe
             entity.HasQueryFilter(QueryFilters.UserFilter ,e => e.OwnerId == currentUser.Id);
             entity.HasQueryFilter(QueryFilters.SoftDeletionFilter, e => e.IsDeleted == false);
             entity.HasQueryFilter(QueryFilters.ArchivedFilter, e => e.IsArchived == false);
-            
         });
     #endregion
-
-
     }
 } 
