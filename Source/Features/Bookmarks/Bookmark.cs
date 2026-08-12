@@ -26,5 +26,5 @@ public class Bookmark
     
     [JsonIgnore]
     public BookmarkGroup? Group { get; set; }
-    public int? GroudId {get; set;}
+    public int? GroupId {get; set;}
 }
