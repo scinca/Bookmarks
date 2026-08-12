@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bookmarks.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260812125649_RenameGroupIDTypo")]
-    partial class RenameGroupIDTypo
+    [Migration("20260812160832_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

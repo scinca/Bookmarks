@@ -1,4 +1,3 @@
-using System.Text.Json.Serialization;
 using Bookmarks.Features.Bookmarks;
 using Bookmarks.Features.User;
 
@@ -6,14 +5,13 @@ namespace Bookmarks.Features.BookmarkGroups;
 
 public class BookmarkGroup
 {
-    public int Id { get; set; }
+    public int Id { get; init; }
     public string Name { get; set; }
     public string? Description {get; set;}
-    public DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; init; }
     
-    public IReadOnlyCollection<Bookmark> Bookmarks { get; }
+    public IReadOnlyCollection<Bookmark> Bookmarks { get; init; }
     
-    [JsonIgnore]
     public ApplicationUser Owner {get; init;}
     public string OwnerId {get; init;}
 }
