@@ -29,7 +29,7 @@ namespace Bookmarks.Migrations
                 table: "Bookmarks",
                 column: "GroupId",
                 principalTable: "BookmarkGroups",
-                principalColumn: "Id",
+                principalColumn: "GroupId",
                 onDelete: ReferentialAction.Cascade);
         }
 
@@ -55,7 +55,7 @@ namespace Bookmarks.Migrations
                 table: "Bookmarks",
                 column: "GroudId",
                 principalTable: "BookmarkGroups",
-                principalColumn: "Id",
+                principalColumn: "GroupId",
                 onDelete: ReferentialAction.Cascade);
         }
     }

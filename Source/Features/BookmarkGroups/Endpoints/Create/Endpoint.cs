@@ -35,7 +35,7 @@ public class Endpoint(AppDbContext context, ICurrentUserService currentUser): En
 
         var response = new Response
         {
-            Id = group.Id,
+            GroupId = group.Id,
             Name = group.Name,
             Description = group.Description,
             CreatedAt = group.CreatedAt,
