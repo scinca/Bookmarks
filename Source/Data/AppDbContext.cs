@@ -1,6 +1,7 @@
 using Bookmarks.Features.BookmarkGroups;
 using Bookmarks.Features.Bookmarks;
 using Bookmarks.Features.User.Services;
+using EntityFramework.Exceptions.Sqlite;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +13,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, ICurrentUserSe
     public DbSet<Bookmark> Bookmarks {get; set;}
     public DbSet<BookmarkGroup> BookmarkGroups {get; set;}
 
- 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+        optionsBuilder.UseExceptionProcessor();
+    }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
