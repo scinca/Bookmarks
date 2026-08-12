@@ -48,7 +48,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, ICurrentUserSe
             entity.HasIndex(e => new { e.Name })
                   .IsUnique();
 
-            entity.HasQueryFilter(e => e.OwnerId == currentUser.Id);
+            entity.HasQueryFilter(QueryFilters.UserFilter ,e => e.OwnerId == currentUser.Id);
         });
     #endregion
         
@@ -95,7 +95,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, ICurrentUserSe
             entity.HasIndex(e => new { e.Name, e.Url })
                   .IsUnique();
             
-            entity.HasQueryFilter(e => e.OwnerId == currentUser.Id);
+            entity.HasQueryFilter(QueryFilters.UserFilter ,e => e.OwnerId == currentUser.Id);
+            entity.HasQueryFilter(QueryFilters.SoftDeletionFilter, e => e.IsDeleted == false);
+            entity.HasQueryFilter(QueryFilters.ArchivedFilter, e => e.IsArchived == false);
+            
         });
     #endregion
 
