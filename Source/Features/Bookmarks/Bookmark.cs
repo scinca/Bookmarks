@@ -23,3 +23,15 @@ public class Bookmark
     public BookmarkGroup? Group { get; set; }
     public int? GroupId {get; set;}
 }
+
+
+public static class BookmarkEndpoints
+{
+    public const string CreateBookmark = "CreateBookmark";
+    public const string DeleteBookmark =  "DeleteBookmark";
+    public const string EmptyTrash =  "EmptyTrash";
+    public const string GetAll =  "GetAll";
+    public const string GetById =  "GetById";
+    public const string Trash = "Trash";
+    public const string UpdateBookmark =  "UpdateBookmark";
+}

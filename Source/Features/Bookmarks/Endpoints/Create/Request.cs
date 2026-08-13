@@ -10,6 +10,9 @@ public class Request
     public string? Description {get; set;}
     
     public int? GroupId {get; set;}
+    
+    [FromClaim] 
+    public string UserId {get; set;}
 }
 
 
