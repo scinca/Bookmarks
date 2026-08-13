@@ -25,15 +25,7 @@ public class Endpoint(AppDbContext context) : EndpointWithoutRequest<List<Respon
                              ItemsCount = bg.Bookmarks.Count
                          })
                          .ToListAsync(cancellationToken: ct);
-
-        if (groups.Count == 0)
-        {
-            await Send.NoContentAsync(cancellation: ct);
-        }
-        else
-        {
+        
             await Send.OkAsync(groups, ct);
-        }
     }
-    
 }

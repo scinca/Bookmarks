@@ -8,8 +8,7 @@ public class Endpoint(AppDbContext context) : Endpoint<Request, Response>
     public override void Configure()
     {
         Get("/group/{GroupId:int}");
-        Description(x =>
-            x.WithName(GroupEndpoints.GetGroupById));
+        Description(x => x.WithName(GroupEndpoints.GetGroupById));
     }
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
