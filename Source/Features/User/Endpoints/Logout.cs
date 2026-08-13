@@ -6,7 +6,7 @@ public class Logout(SignInManager<ApplicationUser> signInManager): EndpointWitho
 {
     public override void Configure()
     {
-        Post("api/auth/logout");
+        Post("auth/logout");
     }
 
     public override async Task HandleAsync(CancellationToken ct)

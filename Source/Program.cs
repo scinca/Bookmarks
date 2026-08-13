@@ -37,6 +37,7 @@ app.UseAuthentication()
        c =>
        {
            c.Binding.ReflectionCache.AddFromBookmarks();
+           c.Endpoints.RoutePrefix = "api";
            c.Errors.UseProblemDetails();
        });
 
