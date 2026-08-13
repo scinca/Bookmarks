@@ -1,29 +1,17 @@
-using Bookmarks.Features.User.Services;
 using EntityFramework.Exceptions.Common;
-using Microsoft.EntityFrameworkCore;
-
 namespace Bookmarks.Features.Bookmarks.Endpoints.Create;
 
-public class Endpoint(AppDbContext context, ICurrentUserService currentUser): Endpoint<Request>
+public class Endpoint(AppDbContext context): Endpoint<Request, Response, CreateMapper>
 {
     public override void Configure()
     {
         Post("/bookmark");
+        Description(x => x.WithName(BookmarkEndpoints.CreateBookmark));
     }
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
-        var displayName = req.Name ?? req.Url;
-        
-        var now = DateTime.Now;
-        var bookmark = new Bookmark
-        {
-            Name = displayName,
-            Url = req.Url,
-            Description = req.Description,
-            GroupId = req.GroupId,
-            OwnerId = currentUser.Id!
-        };
+        var bookmark = Map.ToEntity(req);
 
         try
         {
@@ -34,17 +22,10 @@ public class Endpoint(AppDbContext context, ICurrentUserService currentUser): En
         {
             // Sqlite does not populate constraint name or props
             AddError(e => e.Url, "Url or name already exists");
-
-        }
-        finally
-        {
             ThrowIfAnyErrors();
+
         }
 
-        await Send.CreatedAtAsync<GetById.Endpoint>(
-            routeValues: new { id = bookmark.Id },
-            cancellation: ct);
-
-
+        await SendMappedAsync(bookmark, StatusCodes.Status201Created, ct);
     }
 }

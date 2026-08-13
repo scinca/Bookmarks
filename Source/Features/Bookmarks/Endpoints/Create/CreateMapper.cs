@@ -12,11 +12,12 @@ public class CreateMapper(LinkGenerator linkGenerator) : Mapper<Request, Respons
             OwnerId = r.UserId
         };
 
-    public override Response FromEntity(Bookmark e)
-        => new()
-        {
-            Url = linkGenerator.GetPathByName(
-                BookmarkEndpoints.GetById,
-                new() { ["Id"] = e.Id })
-        };
+    public override Task<Response> FromEntityAsync(Bookmark e, CancellationToken ct)
+        => Task.FromResult(
+            new Response
+            {
+                Url = linkGenerator.GetPathByName(
+                    BookmarkEndpoints.GetById,
+                    new() { ["Id"] = e.Id })
+            });
 }
