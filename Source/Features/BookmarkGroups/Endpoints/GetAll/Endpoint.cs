@@ -7,6 +7,8 @@ public class Endpoint(AppDbContext context) : EndpointWithoutRequest<List<Respon
     public override void Configure()
     {
         Get("/group");
+        Description(x =>
+            x.WithName(GroupEndpoints.GetAll));
     }
 
     public override async Task HandleAsync(CancellationToken ct)
