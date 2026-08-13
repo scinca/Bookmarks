@@ -12,19 +12,19 @@ public class Endpoint(AppDbContext context) : Endpoint<Request, List<Response>>
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
-        var conn = context.Bookmarks.AsNoTracking();
+        var query = context.Bookmarks.AsNoTracking();
         
         if(req.IsArchived is true)
         {
-         conn = conn.IgnoreQueryFilters([QueryFilters.ArchivedFilter])
+         query = query.IgnoreQueryFilters([QueryFilters.ArchivedFilter])
                     .Where(c => c.IsArchived == true);
          
         }else if (req.IsFavourite is true)
         {
-            conn = conn.Where(c => c.IsFavourite == true);
+            query = query.Where(c => c.IsFavourite == true);
         }
 
-        var result = await conn.Select(c => new Response
+        var result = await query.Select(c => new Response
             {
                 Id = c.Id,
                 Name = c.Name,
