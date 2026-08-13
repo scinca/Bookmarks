@@ -12,6 +12,7 @@ public class Request
     public int? GroupId {get; set;}
 }
 
+
 public class RequestValidator : Validator<Request>
 {
     public RequestValidator(AppDbContext context)
