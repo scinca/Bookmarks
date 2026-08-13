@@ -24,4 +24,5 @@ public static class GroupEndpoints
     public const string GetAll = "GetAllGroups";
     public const string GetById = "GetGroupById";
     public const string UpdateGroup = "UpdateGroup";
+    public const string CreateGroup =  "CreateGroup";
 }

@@ -7,6 +7,7 @@ public class Endpoint(AppDbContext context): Endpoint<Request, Response, CreateG
     public override void Configure()
     {
         Post("/group");
+        Description(x => x.WithName(GroupEndpoints.CreateGroup));
     }
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
