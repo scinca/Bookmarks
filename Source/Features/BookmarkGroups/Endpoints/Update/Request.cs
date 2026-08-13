@@ -1,25 +1,29 @@
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bookmarks.Features.BookmarkGroups.Endpoints.Update;
 
 public class Request
 {
     [RouteParam]
-    public int GroupId {get; init;}
+    public int Id {get; init;}
     
     public string? Name {get; init;}
     public string? Description {get; init;}
     public bool? ChangedDescription {get; init;}
 }
 
+
 public class RequestValidator : Validator<Request>
 {
-    public RequestValidator()
+    public RequestValidator(AppDbContext context)
     {
-        RuleFor(x => x.GroupId)
+        RuleFor(x => x.Id)
             .NotEmpty()
-            .GreaterThan(0)
-            .WithMessage("GroupId should be greater than 0");
+            .MustAsync(async (Id, ct) 
+                => await context.BookmarkGroups
+                                .AnyAsync(group => group.Id == Id, cancellationToken: ct))
+            .WithMessage("Group not found");
         
         RuleFor(x => x.Name)
             .NotEmpty()
