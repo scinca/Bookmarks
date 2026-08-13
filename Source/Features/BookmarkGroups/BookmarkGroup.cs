@@ -21,4 +21,7 @@ public static class GroupEndpoints
 {
     public const string GetGroupById = "GetGroupById";
     public const string DeleteGroup = "DeleteGroup";
+    public const string GetAll = "GetAllGroups";
+    public const string GetById = "GetGroupById";
+    public const string UpdateGroup = "UpdateGroup";
 }
