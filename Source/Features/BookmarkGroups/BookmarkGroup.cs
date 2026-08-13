@@ -15,3 +15,9 @@ public class BookmarkGroup
     public ApplicationUser Owner {get; init;}
     public string OwnerId {get; init;}
 }
+
+
+public static class GroupEndpoints
+{
+    public const string GetGroupById = "GetGroupById";
+}

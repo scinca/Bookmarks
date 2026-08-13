@@ -1,3 +1,4 @@
+using Bookmarks.Features.BookmarkGroups;
 namespace Bookmarks.Features.BookmarkGroups.Endpoints.Create;
 
 public class CreateGroupMapper(LinkGenerator linkGenerator): Mapper<Request, Response, BookmarkGroup>
@@ -13,6 +14,7 @@ public class CreateGroupMapper(LinkGenerator linkGenerator): Mapper<Request, Res
     public override Response FromEntity(BookmarkGroup e)
         => new()
         {
-            Url = linkGenerator.GetPathByName("GetGroupById", new { GroupId =  e.Id }),
+            Url = linkGenerator.GetPathByName(GroupEndpoints.GetGroupById,
+                new RouteValueDictionary{["GroupId"] = e.Id}),
         };
 }
