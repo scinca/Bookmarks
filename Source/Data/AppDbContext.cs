@@ -32,12 +32,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, ICurrentUserSe
 
             entity.Property(e => e.CreatedAt)
                   .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                  .IsRequired();
-            
+                  .ValueGeneratedOnAdd();
+
             entity.Property(e => e.Description)
                   .HasMaxLength(500)
-                  .HasDefaultValue(null)
-                  .IsRequired();
+                  .HasDefaultValue(null);
             
             
             entity.HasOne(e => e.Owner)
@@ -50,7 +49,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, ICurrentUserSe
                   .HasForeignKey(e => e.GroupId)
                   .OnDelete(DeleteBehavior.Cascade);
 
-            entity.HasIndex(e => new { e.Name })
+            entity.HasIndex(e => new { e.OwnerId ,e.Name })
                   .IsUnique();
 
             entity.HasQueryFilter(QueryFilters.UserFilter ,e => e.OwnerId == currentUser.Id);
@@ -73,31 +72,28 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, ICurrentUserSe
                   .HasDefaultValue(null);
 
             entity.Property(e => e.IsArchived)
-                  .IsRequired()
                   .HasDefaultValue(false);
 
             entity.Property(e => e.IsFavourite)
-                  .IsRequired()
                   .HasDefaultValue(false);
             
             entity.Property(e => e.IsDeleted)
-                  .IsRequired()
                   .HasDefaultValue(false);
-
+            
             entity.Property(e => e.CreatedAt)
-                  .IsRequired()
-                  .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                  .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                  .ValueGeneratedOnAdd();
 
             entity.Property(e => e.LastModifiedAt)
-                  .IsRequired()
-                  .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                  .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                  .ValueGeneratedOnAddOrUpdate();
 
             entity.HasOne(e => e.Owner)
                   .WithMany()
                   .HasForeignKey(e => e.OwnerId)
                   .OnDelete(DeleteBehavior.Cascade);
 
-            entity.HasIndex(e => new { e.Name, e.Url })
+            entity.HasIndex(e => new { e.OwnerId, e.Name, e.Url })
                   .IsUnique();
             
             entity.HasQueryFilter(QueryFilters.UserFilter ,e => e.OwnerId == currentUser.Id);
