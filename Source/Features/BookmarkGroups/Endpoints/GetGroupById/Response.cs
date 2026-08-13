@@ -2,17 +2,17 @@ namespace Bookmarks.Features.BookmarkGroups.Endpoints.GetById;
 
 public class Response
 {
-    public int Id;
-    public string Name;
-    public string? Description;
-    public DateTime CreatedAt;
-    public IReadOnlyCollection<BookmarkOverview> Bookmarks;
+    public int Id {get; init;}
+    public string Name {get; init;}
+    public string? Description {get; init;}
+    public DateTime CreatedAt {get; init;}
+    public IReadOnlyCollection<BookmarkOverview> Bookmarks {get; init;}
 }
 
 public class BookmarkOverview
 {
-    public int Id;
-    public string Name;
-    public string Url;
-    public bool IsFavourite;
+    public int Id {get; init;}
+    public string Name {get; init;}
+    public string Url {get; init;}
+    public bool IsFavourite {get; init;}
 }
