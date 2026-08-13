@@ -24,10 +24,4 @@
         <PackageReference Include="Scalar.AspNetCore" Version="2.16.5" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Features\Bookmarks\Endpoints\Create\" />
-      <Folder Include="Features\Bookmarks\Endpoints\Delete\" />
-      <Folder Include="Features\Bookmarks\Endpoints\Update\" />
-    </ItemGroup>
-
 </Project>
