@@ -10,10 +10,12 @@ public class CreateGroupMapper(LinkGenerator linkGenerator): Mapper<Request, Res
             OwnerId = r.UserId!
         };
 
-    public override Response FromEntity(BookmarkGroup e)
-        => new()
-        {
-            Url = linkGenerator.GetPathByName(GroupEndpoints.GetGroupById,
-                new() {["GroupId"] = e.Id}),
-        };
+    public override Task<Response> FromEntityAsync(BookmarkGroup e, CancellationToken ct)
+        => Task.FromResult(
+            new Response
+            {
+                Url = linkGenerator.GetPathByName(
+                    GroupEndpoints.GetGroupById,
+                    new() { ["GroupId"] = e.Id })
+            });
 }

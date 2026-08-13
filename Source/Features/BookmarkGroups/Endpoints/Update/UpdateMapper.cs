@@ -16,12 +16,14 @@ public class UpdateMapper : Mapper<Request, Response, BookmarkGroup>
         return e;
     }
 
-    public override Response FromEntity(BookmarkGroup e)
-        => new()
-        {
-            GroupId = e.Id,
-            Name = e.Name,
-            Description = e.Description,
-            CreatedAt = e.CreatedAt,
-        };
+
+    public override Task<Response> FromEntityAsync(BookmarkGroup e, CancellationToken ct)
+        => Task.FromResult(
+            new Response
+            {
+                GroupId = e.Id,
+                Name = e.Name,
+                Description = e.Description,
+                CreatedAt = e.CreatedAt,
+            });
 }
