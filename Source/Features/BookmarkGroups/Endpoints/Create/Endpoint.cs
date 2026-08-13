@@ -3,7 +3,7 @@ using EntityFramework.Exceptions.Common;
 
 namespace Bookmarks.Features.BookmarkGroups.Endpoints.Create;
 
-public class Endpoint(AppDbContext context, ICurrentUserService currentUser): Endpoint<Request, Response>
+public class Endpoint(AppDbContext context): Endpoint<Request, Response, CreateGroupMapper>
 {
     public override void Configure()
     {
@@ -12,13 +12,7 @@ public class Endpoint(AppDbContext context, ICurrentUserService currentUser): En
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
-        var group = new BookmarkGroup
-        {
-            Name = req.Name,
-            Description = req.Description,
-            OwnerId = currentUser.Id!
-        };
-
+        var group = Map.ToEntity(req);
         try
         {
             await context.BookmarkGroups.AddAsync(entity: group, cancellationToken: ct);
@@ -26,24 +20,12 @@ public class Endpoint(AppDbContext context, ICurrentUserService currentUser): En
         }
         catch (UniqueConstraintException)
         {
-            AddError(x => x.Name, "The name must be unique");
+            AddError(x => x.Name, "Name must be unique");
         }
         finally
         {
             ThrowIfAnyErrors();
         }
-
-        var response = new Response
-        {
-            GroupId = group.Id,
-            Name = group.Name,
-            Description = group.Description,
-            CreatedAt = group.CreatedAt,
-        };
-
-        await Send.CreatedAtAsync<GetById.Endpoint>(
-            routeValues: new { GroupId = group.Id },
-            responseBody: response,
-            cancellation: ct);
+        await SendMappedAsync(group, StatusCodes.Status201Created, ct);
     }
 }

@@ -7,7 +7,10 @@ public class Request
     public string Name {get; init;}
     public string? Description {get; init;}
     
+    [FromClaim]
+    public string? UserId {get; init;}
 }
+
 
 public class RequestValidator : Validator<Request>
 {
