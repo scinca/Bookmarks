@@ -15,17 +15,15 @@ public class Endpoint(AppDbContext context): Endpoint<Request, Response, CreateG
         var group = Map.ToEntity(req);
         try
         {
-            await context.BookmarkGroups.AddAsync(entity: group, cancellationToken: ct);
+            context.BookmarkGroups.Add(group);
             await context.SaveChangesAsync(cancellationToken: ct);
         }
         catch (UniqueConstraintException)
         {
             AddError(x => x.Name, "Name must be unique");
-        }
-        finally
-        {
             ThrowIfAnyErrors();
         }
+        
         await SendMappedAsync(group, StatusCodes.Status201Created, ct);
     }
 }
