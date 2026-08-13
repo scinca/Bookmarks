@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-
 namespace Bookmarks.Features.Bookmarks.Endpoints.Delete;
 
 public class Endpoint(AppDbContext context): Endpoint<Request>
@@ -21,8 +19,8 @@ public class Endpoint(AppDbContext context): Endpoint<Request>
         else
         {
             bookmark.IsDeleted = true;
-            
             await context.SaveChangesAsync(cancellationToken: ct);
+            
             await Send.NoContentAsync(cancellation: ct);
         }
     }
