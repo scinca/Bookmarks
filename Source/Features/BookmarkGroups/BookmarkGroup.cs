@@ -20,4 +20,5 @@ public class BookmarkGroup
 public static class GroupEndpoints
 {
     public const string GetGroupById = "GetGroupById";
+    public const string DeleteGroup = "DeleteGroup";
 }

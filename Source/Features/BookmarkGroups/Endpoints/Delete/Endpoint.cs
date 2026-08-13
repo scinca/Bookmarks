@@ -7,6 +7,8 @@ public class Endpoint(AppDbContext context): Endpoint<Request>
     public override void Configure()
     {
         Delete("/group/{GroupId:int}");
+        Description(x =>
+            x.WithName(GroupEndpoints.DeleteGroup));
     }
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
