@@ -7,6 +7,7 @@ public class Endpoint(AppDbContext context) : EndpointWithoutRequest<List<Respon
     public override void Configure()
     {
         Get("/trash");
+        Description(x => x.WithName(BookmarkEndpoints.Trash));
     }
 
     public override async Task HandleAsync(CancellationToken ct)

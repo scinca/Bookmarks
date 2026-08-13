@@ -7,6 +7,7 @@ public class Endpoint(AppDbContext context) : Endpoint<Request, List<Response>>
     public override void Configure()
     {
         Get("/bookmark");
+        Description(x => x.WithName(BookmarkEndpoints.GetAll));
     }
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
