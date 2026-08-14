@@ -1,4 +1,4 @@
-namespace Bookmarks.Features.User.Services;
+namespace Bookmarks.Common;
 
 public interface ICurrentUserService
 {

@@ -1,4 +1,5 @@
-namespace Bookmarks.Features.User.Services;
+
+namespace Bookmarks.Common;
 
 public class FakeCurrentUserService(string id) : ICurrentUserService
 {

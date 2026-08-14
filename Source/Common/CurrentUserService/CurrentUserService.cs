@@ -1,6 +1,6 @@
 using System.Security.Claims;
 
-namespace Bookmarks.Features.User.Services;
+namespace Bookmarks.Common;
 
 internal class CurrentUserService(IHttpContextAccessor context): ICurrentUserService
 {

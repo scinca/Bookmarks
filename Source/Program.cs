@@ -1,5 +1,5 @@
 using Bookmarks.Features.User;
-using Bookmarks.Features.User.Services;
+using Bookmarks.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using Scalar.AspNetCore;
