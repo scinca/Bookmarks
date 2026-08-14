@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using FluentValidation;
 
 namespace Bookmarks.Features.BookmarkGroups.Endpoints.Create;
@@ -7,7 +8,7 @@ public class Request
     public string Name {get; init;}
     public string? Description {get; init;}
     
-    [FromClaim]
+    [FromClaim(ClaimTypes.NameIdentifier)]
     public string? UserId {get; init;}
 }
 

@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,14 +12,14 @@ public class Request
     
     public int? GroupId {get; set;}
     
-    [FromClaim] 
+    [FromClaim(ClaimTypes.NameIdentifier)] 
     public string UserId {get; set;}
 }
 
 
 public class RequestValidator : Validator<Request>
 {
-    public RequestValidator(AppDbContext context)
+    public RequestValidator()
     {
         RuleFor(request => request.Name)
             .Cascade(CascadeMode.Stop)
@@ -40,8 +41,13 @@ public class RequestValidator : Validator<Request>
         RuleFor(request => request.GroupId)
             .MustAsync(
                 async (GroupId, ct) 
-                => await context.BookmarkGroups.AnyAsync(group => group.Id == GroupId,
-                       cancellationToken: ct)).WithMessage("Group not found")
+                =>
+                {
+                    var context =  Resolve<AppDbContext>();
+                    return await context.BookmarkGroups.AnyAsync(
+                               group => group.Id == GroupId,
+                               cancellationToken: ct);
+                }).WithMessage("Group not found")
             .When(request => request.GroupId is not null);
     }
 }

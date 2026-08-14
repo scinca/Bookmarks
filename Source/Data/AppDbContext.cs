@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bookmarks;
 
-
+// #TODO: LastModifiedAt doesn't auto update properly.
 public class AppDbContext(DbContextOptions<AppDbContext> options, ICurrentUserService currentUser) : IdentityDbContext(options)
 {
     public DbSet<Bookmark> Bookmarks {get; set;}

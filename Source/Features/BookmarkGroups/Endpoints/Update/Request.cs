@@ -16,13 +16,17 @@ public class Request
 
 public class RequestValidator : Validator<Request>
 {
-    public RequestValidator(AppDbContext context)
+    public RequestValidator()
     {
         RuleFor(x => x.Id)
             .NotEmpty()
             .MustAsync(async (Id, ct) 
-                => await context.BookmarkGroups
-                                .AnyAsync(group => group.Id == Id, cancellationToken: ct))
+                =>
+            {
+                var context = Resolve<AppDbContext>();
+                return await context.BookmarkGroups
+                                    .AnyAsync(group => group.Id == Id, cancellationToken: ct);
+            })
             .WithMessage("Group not found");
         
         RuleFor(x => x.Name)
