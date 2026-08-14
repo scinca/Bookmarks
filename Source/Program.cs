@@ -1,6 +1,7 @@
 using Bookmarks.Features.User;
 using Bookmarks.Features.User.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,7 +21,14 @@ builder.Services
    .AddFastEndpoints(DiscoveredTypes.All)
    .OpenApiDocument(options =>
    {
-       options.ExcludeNonFastEndpoints = true;
+       options.ExcludeNonFastEndpoints = false;
+       options.EnableJWTBearerAuth =  false;
+       options.AddAuth("Bearer", new()
+       {
+           Type = SecuritySchemeType.Http,
+           Scheme = "Bearer",
+           Description = "ASP .NET Core Authentication"
+       });
    });
 
 
