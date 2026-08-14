@@ -47,7 +47,6 @@ public class RequestValidator : Validator<Request>
         
         RuleFor(request => request.GroupId)
             .Cascade(CascadeMode.Stop)
-            .GreaterThan(0).WithMessage("GroupId must be greater than 0")
             .MustAsync(
                 async (GroupId, ct) 
                     => await context.BookmarkGroups.AnyAsync(group => group.Id == GroupId,
