@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using Bookmarks;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Hosting;
 
@@ -11,7 +12,12 @@ public class App : AppFixture<Program>
     
     protected override async ValueTask SetupAsync()
     {
-        // place one-time setup for the fixture here
+        using (var scope = Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            await db.Database.EnsureCreatedAsync();
+        }
+        
         UserAClient = await CreateAuthedClientAsync("user-a@test.com");
         UserBClient = await CreateAuthedClientAsync("user-b@test.com");
     }
@@ -28,6 +34,8 @@ public class App : AppFixture<Program>
 
     protected override ValueTask TearDownAsync()
     {
+        UserAClient.Dispose();
+        UserBClient.Dispose();
         // do cleanups here
         return ValueTask.CompletedTask;
     }
@@ -35,9 +43,9 @@ public class App : AppFixture<Program>
     public async Task<HttpClient> CreateAuthedClientAsync(string email, string password = "A#1!StrongPassword")
     {
         var anonymous = CreateClient();
-        await anonymous.PostAsJsonAsync("/register", new { email, password });
+        await anonymous.PostAsJsonAsync("api/auth/register", new { email, password });
         
-        var loginResponse = await anonymous.PostAsJsonAsync("/login", new {email, password});
+        var loginResponse = await anonymous.PostAsJsonAsync("api/auth/login", new {email, password});
         var token = await loginResponse.Content.ReadFromJsonAsync<AccessTokenResponse>();
         
         return CreateClient(c => c.DefaultRequestHeaders.Authorization= new("Bearer", token!.AccessToken));
