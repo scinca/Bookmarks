@@ -6,9 +6,7 @@ namespace Bookmarks.Features.Bookmarks.Endpoints.GetAll;
 public class Request
 {
     [QueryParam]
-    public bool? IsArchived {get; init;}
-    [QueryParam]
-    public bool? IsFavourite {get; init;}
+    public ResultFilter ResultFilter {get; init;} = ResultFilter.All;
     [QueryParam]
     public int PageNumber { get; init; }
     [QueryParam]
@@ -26,5 +24,9 @@ public class GetAllValidator : Validator<Request>
         RuleFor(x => x.PageSize)
             .IsInEnum()
             .WithMessage($"PageSize must be in Enum. Possible values are: {PageSize.Small}, {PageSize.Normal} and {PageSize.Large}");
+        
+        RuleFor(x => x.ResultFilter)
+            .IsInEnum()
+            .WithMessage($"Result filter must be in Enum. Possible values are: {ResultFilter.All}, {ResultFilter.Favourites},{ResultFilter.Archived},  {ResultFilter.Deleted}");
     }
 }
