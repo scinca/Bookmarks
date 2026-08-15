@@ -1,8 +1,9 @@
+using Bookmarks.Common.PagedResponse;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bookmarks.Features.Bookmarks.Endpoints.GetAll;
 
-public class Endpoint(AppDbContext context, LinkGenerator linkGenerator) : Endpoint<Request, Response>
+public class Endpoint(AppDbContext context, LinkGenerator linkGenerator) : Endpoint<Request, PagedResponse<Response>>
 {
     public override void Configure()
     {
@@ -34,7 +35,7 @@ public class Endpoint(AppDbContext context, LinkGenerator linkGenerator) : Endpo
         var bookmarks = await query
                            .OrderBy(c => c.Id)
                            .Paginate(req.PageNumber, req.PageSize)
-                           .Select(c => new ResponseModel()
+                           .Select(c => new Response()
             {
                 Id = c.Id,
                 Name = c.Name,
@@ -46,58 +47,17 @@ public class Endpoint(AppDbContext context, LinkGenerator linkGenerator) : Endpo
             })
             .ToListAsync(cancellationToken: ct);
 
-        var response = new Response
+        var routeValues = new RouteValueDictionary
         {
-            CurrentPage = req.PageNumber,
-            PageSize = req.PageSize,
-
-            PreviousPage = CalculatePreviousPage(req.PageNumber, req.PageSize, req.IsArchived, req.IsFavourite),
-            NextPage = CalculateNextPage(req.PageNumber, req.PageSize, req.IsArchived, req.IsFavourite, totalCount),
-
-            Bookmarks = bookmarks,
-            ItemCount = totalCount,
+            ["IsArchived"] = req.IsArchived,
+            ["IsFavourite"] = req.IsFavourite,
         };
+
+        var response =  PagedResponse<Response>.Create(linkGenerator, req.PageNumber, req.PageSize, bookmarks, totalCount, BookmarkEndpoints.GetAll, routeValues);
 
         await Send.OkAsync(response: response, cancellation: ct);
     }
 
-
-    private string? CalculatePreviousPage(int currentPage, PageSize pageSize, bool? IsArchived, bool? IsFavourite)
-    {
-        var previousPageNumber = currentPage - 1;
-
-        if (previousPageNumber < 1)
-        {
-            return null;
-        }
-        
-        var link = linkGenerator.GetPathByName(BookmarkEndpoints.GetAll, new()
-        {
-            ["PageNumber"] = previousPageNumber,
-            ["PageSize"] = pageSize,
-            ["IsArchived"] = IsArchived,
-            ["IsFavourite"] = IsFavourite,
-        });
-        return link;
-    }
-
-    private string? CalculateNextPage(int currentPage, PageSize pageSize, bool? IsArchived, bool? IsFavourite, int totalCount)
-    {
-        var nextPageNumber =  currentPage + 1;
-        if (totalCount <= (int)pageSize * nextPageNumber )
-        {
-            return null;
-        }
-
-        var link = linkGenerator.GetPathByName(BookmarkEndpoints.GetAll, new()
-        {
-            ["PageNumber"] = nextPageNumber,
-            ["PageSize"] = pageSize,
-            ["IsArchived"] = IsArchived,
-            ["IsFavourite"] = IsFavourite,     
-        });
-
-        return link;
-    }
+    
     
 }
