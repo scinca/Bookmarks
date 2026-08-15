@@ -7,7 +7,7 @@ public class Endpoint(AppDbContext context) : Endpoint<Request, Response>
     
     public override void Configure()
     {
-        Get("/group/{GroupId:int}");
+        Get("/group/{Id:int}");
         Description(x => x.WithName(GroupEndpoints.GetGroupById));
     }
 
@@ -32,8 +32,7 @@ public class Endpoint(AppDbContext context) : Endpoint<Request, Response>
                                      }).ToList()
                                  })
                                  .FirstOrDefaultAsync(cancellationToken: ct);
-
-
+        
         if (group is null)
         {
             await Send.NotFoundAsync(cancellation: ct);

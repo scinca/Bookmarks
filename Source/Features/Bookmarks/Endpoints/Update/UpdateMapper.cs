@@ -34,6 +34,8 @@ public class UpdateMapper(LinkGenerator linkGenerator) : Mapper<Request, Respons
             e.GroupId = r.GroupId;
         }
         
+        e.LastModifiedAt = DateTime.Now;
+        
         return e;
     }
     
