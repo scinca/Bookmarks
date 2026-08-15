@@ -1,3 +1,5 @@
+using Bookmarks.Common.PagedResponse;
+
 namespace Bookmarks;
 static class QueryExtensions
 { 
@@ -12,18 +14,10 @@ static class QueryExtensions
         /// <param name="page">The number of the page, defaults to one</param>
         /// <param name="pageSize">The size of the page, see <see cref="PageSize"/> for the different options</param>
         /// <returns> An <see cref="IQueryable{TEntity}"/> to chain LINQ methods </returns>
-        internal IQueryable<TEntity> Paginate(int page = 1, PageSize pageSize = PageSize.Normal)
+        public IQueryable<TEntity> Paginate(int page, PageSize pageSize)
         {
             var sizeAsInt = (int) pageSize;
             return query.Skip((page - 1) * sizeAsInt).Take(sizeAsInt);
         }
-             
     }
-}
-
-public enum PageSize
-{
-    Small = 20,
-    Normal = 50,
-    Large = 100
 }

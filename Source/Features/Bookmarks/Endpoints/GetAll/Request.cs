@@ -1,3 +1,4 @@
+using Bookmarks.Common.PagedResponse;
 using FluentValidation;
 
 namespace Bookmarks.Features.Bookmarks.Endpoints.GetAll;
