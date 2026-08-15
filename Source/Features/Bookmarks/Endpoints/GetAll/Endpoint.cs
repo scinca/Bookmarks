@@ -14,50 +14,59 @@ public class Endpoint(AppDbContext context, LinkGenerator linkGenerator) : Endpo
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
         var query = context.Bookmarks.AsNoTracking();
-        
-        if(req.IsArchived is true)
+
+        query = req.ResultFilter switch
         {
-         query = query.IgnoreQueryFilters([QueryFilters.ArchivedFilter])
-                    .Where(c => c.IsArchived == true);
-         
-        }else if (req.IsFavourite is true)
-        {
-            query = query.Where(c => c.IsFavourite == true);
-        }
-        
+            ResultFilter.Archived => query.IgnoreQueryFilters([QueryFilters.ArchivedFilter])
+                                          .Where(c => c.IsArchived == true),
+            ResultFilter.Deleted => query
+                                    .IgnoreQueryFilters([QueryFilters.SoftDeletionFilter])
+                                    .Where(c => c.IsDeleted == true),
+            ResultFilter.Favourites => query.Where(c => c.IsFavourite == true),
+
+            _ => query // Returns All (no filters like ResulFilter.All
+        };
+
         var totalCount = await query.CountAsync(ct);
 
-        if (totalCount > (int) req.PageSize * req.PageNumber)
+
+        if (totalCount > 0 && req.PageNumber > Math.Ceiling((double) totalCount / (int) req.PageSize))
         {
             await Send.NotFoundAsync(ct);
+
+            return;
         }
 
         var bookmarks = await query
-                           .OrderBy(c => c.Id)
-                           .Paginate(req.PageNumber, req.PageSize)
-                           .Select(c => new Response()
-            {
-                Id = c.Id,
-                Name = c.Name,
-                Url = c.Url,
-                IsArchived = c.IsArchived,
-                IsFavourite = c.IsFavourite,
-                CreatedAt = c.CreatedAt,
-                LastModifiedAt = c.LastModifiedAt,
-            })
-            .ToListAsync(cancellationToken: ct);
+                              .OrderBy(c => c.Id)
+                              .Paginate(req.PageNumber, req.PageSize)
+                              .Select(c => new Response()
+                              {
+                                  Id = c.Id,
+                                  Name = c.Name,
+                                  Url = c.Url,
+                                  IsDeleted = c.IsDeleted,
+                                  IsArchived = c.IsArchived,
+                                  IsFavourite = c.IsFavourite,
+                                  CreatedAt = c.CreatedAt,
+                                  LastModifiedAt = c.LastModifiedAt,
+                              })
+                              .ToListAsync(cancellationToken: ct);
 
         var routeValues = new RouteValueDictionary
         {
-            ["IsArchived"] = req.IsArchived,
-            ["IsFavourite"] = req.IsFavourite,
+            ["ResultFilter"] = req.ResultFilter,
         };
 
-        var response =  PagedResponse<Response>.Create(linkGenerator, req.PageNumber, req.PageSize, bookmarks, totalCount, BookmarkEndpoints.GetAll, routeValues);
+        var response = PagedResponse<Response>.Create(
+            linkGenerator,
+            req.PageNumber,
+            req.PageSize,
+            bookmarks,
+            totalCount,
+            BookmarkEndpoints.GetAll,
+            routeValues);
 
         await Send.OkAsync(response: response, cancellation: ct);
     }
-
-    
-    
 }
