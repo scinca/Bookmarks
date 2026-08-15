@@ -18,7 +18,7 @@ public class Endpoint(AppDbContext context): Endpoint<Request, Response, CreateM
             await context.Bookmarks.AddAsync(bookmark, cancellationToken: ct);
             await context.SaveChangesAsync(ct);
         }
-        catch (UniqueConstraintException ex)
+        catch (UniqueConstraintException)
         {
             // Sqlite does not populate constraint name or props
             AddError(e => e.Url, "Url or name already exists");
