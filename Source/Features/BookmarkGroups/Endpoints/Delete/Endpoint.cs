@@ -6,7 +6,7 @@ public class Endpoint(AppDbContext context): Endpoint<Request>
 {
     public override void Configure()
     {
-        Delete("/group/{GroupId:int}");
+        Delete("/group/{Id:int}");
         Description(x =>
             x.WithName(GroupEndpoints.DeleteGroup));
     }
@@ -14,7 +14,7 @@ public class Endpoint(AppDbContext context): Endpoint<Request>
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
         var result = await context.BookmarkGroups
-                                  .Where(bg => bg.Id == req.GroupId)
+                                  .Where(bg => bg.Id == req.Id)
                                   .ExecuteDeleteAsync(cancellationToken: ct);
 
         if (result is 0)

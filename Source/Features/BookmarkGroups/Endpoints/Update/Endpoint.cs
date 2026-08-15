@@ -4,7 +4,7 @@ public class Endpoint(AppDbContext context): Endpoint<Request, Response, UpdateM
 {
     public override void Configure()
     {
-        Patch("/group/{GroupId:int}");
+        Patch("/group/{Id:int}");
         Description(x => x.WithName(GroupEndpoints.UpdateGroup));
     }
 
