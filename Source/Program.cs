@@ -37,7 +37,7 @@ builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 var app = builder.Build();
 
-app.MapGroup("api/auth").MapIdentityApi<ApplicationUser>().WithTags("auth");
+app.MapGroup("api/auth").MapIdentityApi<ApplicationUser>().WithTags("Auth");
 
 app.UseAuthentication()
    .UseAuthorization()
