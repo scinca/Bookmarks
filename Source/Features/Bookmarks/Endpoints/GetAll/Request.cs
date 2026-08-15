@@ -7,10 +7,11 @@ public class Request
 {
     [QueryParam]
     public ResultFilter ResultFilter {get; init;} = ResultFilter.All;
+
     [QueryParam]
-    public int PageNumber { get; init; }
+    public int PageNumber { get; init; } = 1;
     [QueryParam]
-    public PageSize PageSize {get; init;}
+    public PageSize PageSize {get; init;} = PageSize.Normal;
 }
 
 public class GetAllValidator : Validator<Request>
