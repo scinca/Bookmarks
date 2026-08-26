@@ -37,7 +37,7 @@ internal class UpdateBookmarkRequestValidator : Validator<UpdateBookmarkRequest>
             .Cascade(CascadeMode.Stop)
             .NotEmpty().WithMessage("Url cannot be empty")
             .Must(url =>
-                Uri.IsWellFormedUriString(url, UriKind.Absolute)).WithMessage("Url must be a valid absolute URL")
+                Uri.TryCreate(url, UriKind.Absolute, out _)).WithMessage("Url must be a valid absolute URL")
             .When(request => request.Url is not null);
         
         RuleFor(request => request.Description)
