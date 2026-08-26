@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bookmarks.Features.BookmarkGroups.Endpoints;
 
-public class GetAllBookmarkGroupsEndpoint(AppDbContext context) : EndpointWithoutRequest<List<GetAllBookmarkGroupsResponse>>
+public class GetAllBookmarkGroupsEndpoint(AppDbContext context) : EndpointWithoutRequest<GetAllBookmarkGroupsResponse>
 {
     public override void Configure()
     {
@@ -16,7 +16,7 @@ public class GetAllBookmarkGroupsEndpoint(AppDbContext context) : EndpointWithou
         var groups = await context
                          .BookmarkGroups
                          .AsNoTracking()
-                         .Select(bg => new GetAllBookmarkGroupsResponse
+                         .Select(bg => new GetAllBookmarkGroupsResponseModel()
                          {
                              Id = bg.Id,
                              Name = bg.Name,
@@ -25,7 +25,13 @@ public class GetAllBookmarkGroupsEndpoint(AppDbContext context) : EndpointWithou
                              ItemsCount = bg.Bookmarks.Count
                          })
                          .ToListAsync(cancellationToken: ct);
+
+        var response = new GetAllBookmarkGroupsResponse
+        {
+            Count = groups.Count,
+            BookmarkGroups = groups
+        };
         
-            await Send.OkAsync(groups, ct);
+            await Send.OkAsync(response, ct);
     }
 }
