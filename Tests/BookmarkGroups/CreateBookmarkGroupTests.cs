@@ -67,12 +67,10 @@ public class CreateTests(App App) : TestBase<App>
     [Fact]
     public async Task Create_WithBadData_ShouldFail()
     {
-        var faker = new Faker();
-
         var (rsp, res) = await App.UserAClient.POSTAsync<CreateBookmarkGroupEndpoint, CreateBookmarkGroupRequest, ProblemDetails>(new()
         {
             Name = string.Empty,
-            Description = faker.Random.String2(1234)
+            Description = Fake.Random.String2(1234)
         });
         
         rsp.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
@@ -82,7 +80,7 @@ public class CreateTests(App App) : TestBase<App>
         
         var (rsp2, _) = await App.UserAClient.POSTAsync<CreateBookmarkGroupEndpoint, CreateBookmarkGroupRequest, ProblemDetails>(new()
         {
-            Name = faker.Random.String2(1234),
+            Name = Fake.Random.String2(1234),
             Description = null
         });
         
