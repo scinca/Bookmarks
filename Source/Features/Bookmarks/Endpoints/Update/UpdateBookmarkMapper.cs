@@ -1,4 +1,4 @@
-namespace Bookmarks.Features.Bookmarks.Endpoints.Update;
+namespace Bookmarks.Features.Bookmarks.Endpoints;
 
 public class UpdateBookmarkMapper(LinkGenerator linkGenerator) : Mapper<UpdateBookmarkRequest, UpdateBookmarkResponse, Bookmark>
 {

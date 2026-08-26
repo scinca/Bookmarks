@@ -1,6 +1,6 @@
-namespace Bookmarks.Features.Bookmarks.Endpoints.Delete;
+namespace Bookmarks.Features.Bookmarks.Endpoints;
 
-public class Endpoint(AppDbContext context): Endpoint<Request>
+public class DeleteBookmarkEndpoint(AppDbContext context): Endpoint<DeleteBookmarkResponse>
 {
     public override void Configure()
     {
@@ -8,7 +8,7 @@ public class Endpoint(AppDbContext context): Endpoint<Request>
         Description(x => x.WithName(BookmarkEndpoints.DeleteBookmark));
     }
 
-    public override async Task HandleAsync(Request req, CancellationToken ct)
+    public override async Task HandleAsync(DeleteBookmarkResponse req, CancellationToken ct)
     {
         var bookmark = await context.Bookmarks
                                   .FindAsync([req.Id], cancellationToken: ct);

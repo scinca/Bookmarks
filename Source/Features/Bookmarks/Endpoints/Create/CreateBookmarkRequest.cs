@@ -2,9 +2,9 @@ using System.Security.Claims;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
-namespace Bookmarks.Features.Bookmarks.Endpoints.Create;
+namespace Bookmarks.Features.Bookmarks.Endpoints;
 
-public class Request
+public class CreateBookmarkRequest
 {
     public string? Name {get; set;}
     public string Url {get; set;}
@@ -17,9 +17,9 @@ public class Request
 }
 
 
-public class RequestValidator : Validator<Request>
+internal class CreateBookmarkRequestValidator : Validator<CreateBookmarkRequest>
 {
-    public RequestValidator()
+    public CreateBookmarkRequestValidator()
     {
         RuleFor(request => request.Name)
             .Cascade(CascadeMode.Stop)

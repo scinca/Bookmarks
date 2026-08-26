@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace Bookmarks.Features.Bookmarks.Endpoints.EmptyTrash;
+namespace Bookmarks.Features.Bookmarks.Endpoints;
 
-public class Endpoint(AppDbContext context) : EndpointWithoutRequest
+public class EmptyTrashEndpoint(AppDbContext context) : EndpointWithoutRequest
 {
     public override void Configure()
     {

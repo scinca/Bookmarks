@@ -1,9 +1,9 @@
 using Bookmarks.Common.PagedResponse;
 using FluentValidation;
 
-namespace Bookmarks.Features.Bookmarks.Endpoints.GetAll;
+namespace Bookmarks.Features.Bookmarks.Endpoints;
 
-public class Request
+public class GetAllBookmarksRequest
 {
     [QueryParam]
     public ResultFilter ResultFilter {get; init;} = ResultFilter.All;
@@ -14,7 +14,7 @@ public class Request
     public PageSize PageSize {get; init;} = PageSize.Normal;
 }
 
-public class GetAllValidator : Validator<Request>
+public class GetAllValidator : Validator<GetAllBookmarksRequest>
 {
     public GetAllValidator()
     {

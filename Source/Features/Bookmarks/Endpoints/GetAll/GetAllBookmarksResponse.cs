@@ -1,7 +1,7 @@
-namespace Bookmarks.Features.Bookmarks.Endpoints.GetAll;
+namespace Bookmarks.Features.Bookmarks.Endpoints;
 
 
-public class Response
+public class GetAllBookmarksResponse
 {
     public int Id {get; init;}
     public string Name {get; init;}

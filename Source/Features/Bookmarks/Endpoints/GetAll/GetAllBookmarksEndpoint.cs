@@ -1,9 +1,9 @@
 using Bookmarks.Common.PagedResponse;
 using Microsoft.EntityFrameworkCore;
 
-namespace Bookmarks.Features.Bookmarks.Endpoints.GetAll;
+namespace Bookmarks.Features.Bookmarks.Endpoints;
 
-public class Endpoint(AppDbContext context, LinkGenerator linkGenerator) : Endpoint<Request, PagedResponse<Response>>
+public class GetAllBookmarksEndpoint(AppDbContext context, LinkGenerator linkGenerator) : Endpoint<GetAllBookmarksRequest, PagedResponse<GetAllBookmarksResponse>>
 {
     public override void Configure()
     {
@@ -11,7 +11,7 @@ public class Endpoint(AppDbContext context, LinkGenerator linkGenerator) : Endpo
         Description(x => x.WithName(BookmarkEndpoints.GetAll));
     }
 
-    public override async Task HandleAsync(Request req, CancellationToken ct)
+    public override async Task HandleAsync(GetAllBookmarksRequest req, CancellationToken ct)
     {
         var query = context.Bookmarks.AsNoTracking();
 
@@ -40,7 +40,7 @@ public class Endpoint(AppDbContext context, LinkGenerator linkGenerator) : Endpo
         var bookmarks = await query
                               .OrderBy(c => c.Id)
                               .Paginate(req.PageNumber, req.PageSize)
-                              .Select(c => new Response()
+                              .Select(c => new GetAllBookmarksResponse()
                               {
                                   Id = c.Id,
                                   Name = c.Name,
@@ -58,7 +58,7 @@ public class Endpoint(AppDbContext context, LinkGenerator linkGenerator) : Endpo
             ["ResultFilter"] = req.ResultFilter,
         };
 
-        var response = PagedResponse<Response>.Create(
+        var response = PagedResponse<GetAllBookmarksResponse>.Create(
             linkGenerator,
             req.PageNumber,
             req.PageSize,

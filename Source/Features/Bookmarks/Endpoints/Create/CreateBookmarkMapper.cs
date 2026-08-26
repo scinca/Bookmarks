@@ -1,8 +1,8 @@
-namespace Bookmarks.Features.Bookmarks.Endpoints.Create;
+namespace Bookmarks.Features.Bookmarks.Endpoints;
 
-public class CreateMapper(LinkGenerator linkGenerator) : Mapper<Request, Response, Bookmark>
+public class CreateBookmarkMapper(LinkGenerator linkGenerator) : Mapper<CreateBookmarkRequest, CreateBookmarkResponse, Bookmark>
 {
-    public override Bookmark ToEntity(Request r)
+    public override Bookmark ToEntity(CreateBookmarkRequest r)
         => new ()
         {
             Name = r.Name ?? r.Url,
@@ -12,9 +12,9 @@ public class CreateMapper(LinkGenerator linkGenerator) : Mapper<Request, Respons
             OwnerId = r.UserId
         };
 
-    public override Task<Response> FromEntityAsync(Bookmark e, CancellationToken ct)
+    public override Task<CreateBookmarkResponse> FromEntityAsync(Bookmark e, CancellationToken ct)
         => Task.FromResult(
-            new Response
+            new CreateBookmarkResponse
             {
                 Url = linkGenerator.GetPathByName(
                     BookmarkEndpoints.GetById,

@@ -1,7 +1,7 @@
 using EntityFramework.Exceptions.Common;
-namespace Bookmarks.Features.Bookmarks.Endpoints.Create;
+namespace Bookmarks.Features.Bookmarks.Endpoints;
 
-public class Endpoint(AppDbContext context): Endpoint<Request, Response, CreateMapper>
+public class CreateBookmarkEndpoint(AppDbContext context): Endpoint<CreateBookmarkRequest, CreateBookmarkResponse, CreateBookmarkMapper>
 {
     public override void Configure()
     {
@@ -9,7 +9,7 @@ public class Endpoint(AppDbContext context): Endpoint<Request, Response, CreateM
         Description(x => x.WithName(BookmarkEndpoints.CreateBookmark));
     }
 
-    public override async Task HandleAsync(Request req, CancellationToken ct)
+    public override async Task HandleAsync(CreateBookmarkRequest req, CancellationToken ct)
     {
         var bookmark = Map.ToEntity(req);
 
