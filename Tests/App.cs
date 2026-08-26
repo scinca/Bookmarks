@@ -45,7 +45,7 @@ public class App : AppFixture<Program>
     
     public async Task<HttpClient> CreateAuthenticatedClientAsync(string email, string password = "A#1!StrongPassword")
     {
-        var anonymous = CreateClient();
+        using var anonymous = CreateClient();
         await anonymous.PostAsJsonAsync("api/auth/register", new { email, password });
         
         var loginResponse = await anonymous.PostAsJsonAsync("api/auth/login", new {email, password});
