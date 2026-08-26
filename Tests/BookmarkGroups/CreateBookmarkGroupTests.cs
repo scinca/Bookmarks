@@ -1,4 +1,5 @@
 using System.Net;
+using Bogus;
 using Bookmarks.Features.BookmarkGroups.Endpoints;
 namespace Tests.BookmarkGroups.CreateBookmarkGroupTests;
 
@@ -44,7 +45,7 @@ public class CreateTests(App App) : TestBase<App>
     [Fact]
     public async Task Create_WithSameData_ShouldFail()
     {
-        var (rsp1, res1) = await App.UserAClient.POSTAsync<CreateBookmarkGroupEndpoint, CreateBookmarkGroupRequest, CreateBookmarkGroupResponse>(new ()
+        var (rsp1, _) = await App.UserAClient.POSTAsync<CreateBookmarkGroupEndpoint, CreateBookmarkGroupRequest, CreateBookmarkGroupResponse>(new ()
         {
             Name= "Duplicate Test",
             Description = null
@@ -60,5 +61,23 @@ public class CreateTests(App App) : TestBase<App>
         
         rsp2.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
         res2.Errors.Count().ShouldBe(1);
+        res2.Errors.ShouldContain(e => e.Name.Equals(nameof(CreateBookmarkGroupRequest.Name), StringComparison.OrdinalIgnoreCase));
+    }
+
+    [Fact]
+    public async Task Create_WithBadData_ShouldFail()
+    {
+        var faker = new Faker();
+
+        var (rsp, res) = await App.UserAClient.POSTAsync<CreateBookmarkGroupEndpoint, CreateBookmarkGroupRequest, ProblemDetails>(new()
+        {
+            Name = string.Empty,
+            Description = faker.Random.String2(1234)
+        });
+        
+        rsp.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
+        res.Errors.Count().ShouldBe(2);
+        res.Errors.ShouldContain(e => e.Name.Equals(nameof(CreateBookmarkGroupRequest.Name), StringComparison.OrdinalIgnoreCase));
+        
     }
 }
