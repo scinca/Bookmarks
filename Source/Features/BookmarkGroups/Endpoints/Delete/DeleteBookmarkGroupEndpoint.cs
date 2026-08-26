@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace Bookmarks.Features.BookmarkGroups.Endpoints.Delete;
+namespace Bookmarks.Features.BookmarkGroups.Endpoints;
 
-public class Endpoint(AppDbContext context): Endpoint<Request>
+public class DeleteBookmarkGroupEndpoint(AppDbContext context): Endpoint<DeleteBookmarkGroupRequest>
 {
     public override void Configure()
     {
@@ -11,7 +11,7 @@ public class Endpoint(AppDbContext context): Endpoint<Request>
             x.WithName(GroupEndpoints.DeleteGroup));
     }
 
-    public override async Task HandleAsync(Request req, CancellationToken ct)
+    public override async Task HandleAsync(DeleteBookmarkGroupRequest req, CancellationToken ct)
     {
         var result = await context.BookmarkGroups
                                   .Where(bg => bg.Id == req.Id)
