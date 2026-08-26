@@ -2,7 +2,7 @@ using EntityFramework.Exceptions.Common;
 
 namespace Bookmarks.Features.BookmarkGroups.Endpoints;
 
-public class CreateBookmarkGroup(AppDbContext context): Endpoint<CreateBookmarkGroupRequest, CreateBookmarkGroupResponse, CreateBookmarkGroupMapper>
+public class CreateBookmarkGroupEndpoint(AppDbContext context): Endpoint<CreateBookmarkGroupRequest, CreateBookmarkGroupResponse, CreateBookmarkGroupMapper>
 {
     public override void Configure()
     {

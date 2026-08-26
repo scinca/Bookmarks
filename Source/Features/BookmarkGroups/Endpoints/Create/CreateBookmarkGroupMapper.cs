@@ -16,6 +16,6 @@ public class CreateBookmarkGroupMapper(LinkGenerator linkGenerator): Mapper<Crea
             {
                 Url = linkGenerator.GetPathByName(
                     GroupEndpoints.GetGroupById,
-                    new() { ["GroupId"] = e.Id })
+                    new() { ["Id"] = e.Id })
             });
 }
