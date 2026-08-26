@@ -1,7 +1,11 @@
 ﻿using System.Net.Http.Json;
+using Bogus;
 using Bookmarks;
+using Bookmarks.Features.BookmarkGroups;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Tests;
 
@@ -19,7 +23,7 @@ public class App : AppFixture<Program>
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             await db.Database.EnsureCreatedAsync();
         }
-
+        
         (UserAClient, UserAId) = await CreateAuthenticatedClientAsync("user-a@test.com");
         (UserBClient, UserBId) = await CreateAuthenticatedClientAsync("user-b@test.com");
     }
@@ -31,7 +35,12 @@ public class App : AppFixture<Program>
 
     protected override void ConfigureServices(IServiceCollection s)
     {
-        // do test service registration here
+        s.RemoveAll<AppDbContext>();
+        var dbName = $"test_{Guid.NewGuid()}.db";
+        s.AddDbContext<AppDbContext>(options =>
+        {
+            options.UseSqlite($"Data Source={dbName};");
+        });
     }
 
     protected override async ValueTask TearDownAsync()
@@ -59,4 +68,12 @@ public class App : AppFixture<Program>
         
         return (CreateClient(c => c.DefaultRequestHeaders.Authorization= new("Bearer", token!.AccessToken)), userId);
     }
+
+    public static Faker<BookmarkGroup> BookmarkGroupFaker(string?[] ownerIds)
+        => new Faker<BookmarkGroup>()
+           .RuleFor(bg => bg.Name, f => f.Lorem.Word() + f.Random.String2(20))
+           .RuleFor(bg => bg.Description, f => f.Random.Bool() ? f.Lorem.Sentence() : null)
+           .RuleFor(bg => bg.CreatedAt, f => f.Date.Recent(10))
+           .RuleFor(bg => bg.OwnerId, f => f.PickRandom(ownerIds));
+
 }

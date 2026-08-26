@@ -1,5 +1,4 @@
 using System.Net;
-using Bogus;
 using Bookmarks.Features.BookmarkGroups.Endpoints;
 namespace Tests.BookmarkGroups.CreateBookmarkGroupTests;
 
