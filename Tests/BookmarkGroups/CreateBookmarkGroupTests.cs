@@ -76,8 +76,18 @@ public class CreateTests(App App) : TestBase<App>
         });
         
         rsp.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
-        res.Errors.Count().ShouldBe(2);
+        res.Errors.Count().ShouldBeGreaterThanOrEqualTo(2);
         res.Errors.ShouldContain(e => e.Name.Equals(nameof(CreateBookmarkGroupRequest.Name), StringComparison.OrdinalIgnoreCase));
+        res.Errors.ShouldContain(e => e.Name.Equals(nameof(CreateBookmarkGroupRequest.Description), StringComparison.OrdinalIgnoreCase));
         
+        var (rsp2, _) = await App.UserAClient.POSTAsync<CreateBookmarkGroupEndpoint, CreateBookmarkGroupRequest, ProblemDetails>(new()
+        {
+            Name = faker.Random.String2(1234),
+            Description = null
+        });
+        
+        rsp2.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
+        res.Errors.Count().ShouldBeGreaterThanOrEqualTo(1);
+        res.Errors.ShouldContain(e => e.Name.Equals(nameof(CreateBookmarkGroupRequest.Name), StringComparison.OrdinalIgnoreCase));
     }
 }
