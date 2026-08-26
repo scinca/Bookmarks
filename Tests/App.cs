@@ -32,12 +32,15 @@ public class App : AppFixture<Program>
         // do test service registration here
     }
 
-    protected override ValueTask TearDownAsync()
+    protected override async ValueTask TearDownAsync()
     {
         UserAClient.Dispose();
         UserBClient.Dispose();
-        // do cleanups here
-        return ValueTask.CompletedTask;
+
+        using var scope = Services.CreateScope();
+
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        await db.Database.EnsureDeletedAsync();
     }
     
     public async Task<HttpClient> CreateAuthedClientAsync(string email, string password = "A#1!StrongPassword")
