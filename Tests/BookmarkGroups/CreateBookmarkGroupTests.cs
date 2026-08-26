@@ -1,11 +1,11 @@
-using Bookmarks.Features.BookmarkGroups.Endpoints.Create;
-namespace Tests.BookmarkGroups.Create;
+using Bookmarks.Features.BookmarkGroups.Endpoints;
+namespace Tests.BookmarkGroups.CreateBookmarkGroupTests;
 
 public class CreateTests(App App) : TestBase<App>
 {
     [Fact]
     public async Task Create_WithValidData(){
-        var (rsp, res) = await App.UserAClient.POSTAsync<Endpoint, Request, Response>(new ()
+        var (rsp, res) = await App.UserAClient.POSTAsync<CreateBookmarkGroup, CreateBookmarkGroupRequest, CreateBookmarkGroupResponse>(new ()
         {
             Name= "TestGroup",
             Description = null

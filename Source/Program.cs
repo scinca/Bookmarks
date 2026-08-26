@@ -1,4 +1,3 @@
-using System.Text.Json.Serialization;
 using Bookmarks.Features.User;
 using Bookmarks.Common;
 using Microsoft.EntityFrameworkCore;

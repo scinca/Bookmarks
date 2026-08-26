@@ -1,5 +1,3 @@
-using Bookmarks.Features.Bookmarks;
-
 namespace Bookmarks.Common.PagedResponse;
 
 public class PagedResponse<TResponse>
@@ -12,13 +10,10 @@ public class PagedResponse<TResponse>
     public string? NextPage {get; private set;}
 
     
-    
     public IReadOnlyCollection<TResponse> Contents {get; private set;}
     public int ItemCount {get; private set;}
-
-
-
-
+    
+    
     public static PagedResponse<TResponse> Create(LinkGenerator linkGenerator,int currentPage,
                                                   PageSize pageSize,
                                                   IReadOnlyCollection<TResponse> contents,

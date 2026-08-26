@@ -1,8 +1,8 @@
 using EntityFramework.Exceptions.Common;
 
-namespace Bookmarks.Features.BookmarkGroups.Endpoints.Create;
+namespace Bookmarks.Features.BookmarkGroups.Endpoints;
 
-public class Endpoint(AppDbContext context): Endpoint<Request, Response, CreateGroupMapper>
+public class CreateBookmarkGroup(AppDbContext context): Endpoint<CreateBookmarkGroupRequest, CreateBookmarkGroupResponse, CreateBookmarkGroupMapper>
 {
     public override void Configure()
     {
@@ -10,7 +10,7 @@ public class Endpoint(AppDbContext context): Endpoint<Request, Response, CreateG
         Description(x => x.WithName(GroupEndpoints.CreateGroup));
     }
 
-    public override async Task HandleAsync(Request req, CancellationToken ct)
+    public override async Task HandleAsync(CreateBookmarkGroupRequest req, CancellationToken ct)
     {
         var group = Map.ToEntity(req);
         try

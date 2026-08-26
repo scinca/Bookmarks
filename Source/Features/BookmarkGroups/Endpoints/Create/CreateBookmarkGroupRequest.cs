@@ -1,9 +1,9 @@
 using System.Security.Claims;
 using FluentValidation;
 
-namespace Bookmarks.Features.BookmarkGroups.Endpoints.Create;
+namespace Bookmarks.Features.BookmarkGroups.Endpoints;
 
-public class Request
+public class CreateBookmarkGroupRequest
 {
     public string Name {get; init;}
     public string? Description {get; init;}
@@ -13,9 +13,9 @@ public class Request
 }
 
 
-public class RequestValidator : Validator<Request>
+internal class CreateBookmarkGroupRequestValidator : Validator<CreateBookmarkGroupRequest>
 {
-    public RequestValidator()
+    public CreateBookmarkGroupRequestValidator()
     {
         RuleFor(x => x.Name)
             .Cascade(CascadeMode.Stop)
