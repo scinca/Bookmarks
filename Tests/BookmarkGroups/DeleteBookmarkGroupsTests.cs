@@ -24,12 +24,14 @@ public class DeleteBookmarkGroupsTests(App App) : TestBase<App>
     [Fact]
     public async Task Delete_WithValidData_ShouldSucceed()
     {
+
+        const int id = 12345;
         using (var scope = App.Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             db.BookmarkGroups.Add(new ()
             {
-                Id = 1,
+                Id = id,
                 Name = "Delete_WithValidData_Test",
                 Description = null,
                 CreatedAt = DateTime.UtcNow,
@@ -43,14 +45,14 @@ public class DeleteBookmarkGroupsTests(App App) : TestBase<App>
                                   .DELETEAsync<DeleteBookmarkGroupEndpoint, DeleteBookmarkGroupRequest, EmptyResponse>(
                                       new()
                                       {
-                                          Id = 1
+                                          Id = id
                                       });
         res.StatusCode.ShouldBe(HttpStatusCode.NoContent);
 
         using (var scope = App.Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            var stillInDb = await db.BookmarkGroups.AsNoTracking().IgnoreQueryFilters().Where(bg=> bg.Id == 1).AnyAsync(TestContext.Current.CancellationToken);
+            var stillInDb = await db.BookmarkGroups.AsNoTracking().IgnoreQueryFilters().Where(bg=> bg.Id == id).AnyAsync(TestContext.Current.CancellationToken);
             stillInDb.ShouldBeFalse();
         }
     }
@@ -58,12 +60,14 @@ public class DeleteBookmarkGroupsTests(App App) : TestBase<App>
     [Fact]
     public async Task Delete_FromOtherUser_ShouldFail()
     {
+        const int id = 1000;
+        
         using (var scope = App.Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             db.BookmarkGroups.Add(new ()
             {
-                Id = 10,
+                Id = id,
                 Name = Guid.NewGuid().ToString(),
                 Description = null,
                 CreatedAt = DateTime.UtcNow,
@@ -74,7 +78,7 @@ public class DeleteBookmarkGroupsTests(App App) : TestBase<App>
 
         var (rsp, _) = await App.UserBClient.DELETEAsync<DeleteBookmarkGroupEndpoint, DeleteBookmarkGroupRequest, EmptyResponse>(new()
         {
-            Id = 10
+            Id = id
         });
         
         rsp.StatusCode.ShouldBe(HttpStatusCode.NotFound);
@@ -82,7 +86,7 @@ public class DeleteBookmarkGroupsTests(App App) : TestBase<App>
         using (var scope = App.Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            var stillInDb = await db.BookmarkGroups.AsNoTracking().IgnoreQueryFilters().Where(bg => bg.Id == 10).AnyAsync(TestContext.Current.CancellationToken);
+            var stillInDb = await db.BookmarkGroups.AsNoTracking().IgnoreQueryFilters().Where(bg => bg.Id == id).AnyAsync(TestContext.Current.CancellationToken);
             stillInDb.ShouldBeTrue();
         }
     }
