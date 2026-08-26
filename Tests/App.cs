@@ -18,8 +18,8 @@ public class App : AppFixture<Program>
             await db.Database.EnsureCreatedAsync();
         }
         
-        UserAClient = await CreateAuthedClientAsync("user-a@test.com");
-        UserBClient = await CreateAuthedClientAsync("user-b@test.com");
+        UserAClient = await CreateAuthenticatedClientAsync("user-a@test.com");
+        UserBClient = await CreateAuthenticatedClientAsync("user-b@test.com");
     }
 
     protected override void ConfigureApp(IWebHostBuilder a)
@@ -43,7 +43,7 @@ public class App : AppFixture<Program>
         await db.Database.EnsureDeletedAsync();
     }
     
-    public async Task<HttpClient> CreateAuthedClientAsync(string email, string password = "A#1!StrongPassword")
+    public async Task<HttpClient> CreateAuthenticatedClientAsync(string email, string password = "A#1!StrongPassword")
     {
         var anonymous = CreateClient();
         await anonymous.PostAsJsonAsync("api/auth/register", new { email, password });
