@@ -352,4 +352,4 @@ MigrationBackup/
 .idea/
 
 # sqlite db
-.db
+*.db
