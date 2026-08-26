@@ -1,9 +1,9 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
-namespace Bookmarks.Features.BookmarkGroups.Endpoints.Update;
+namespace Bookmarks.Features.BookmarkGroups.Endpoints;
 
-public class Request
+public class UpdateBookmarkGroupRequest
 {
     [RouteParam]
     public int Id {get; init;}
@@ -14,9 +14,9 @@ public class Request
 }
 
 
-public class RequestValidator : Validator<Request>
+internal class UpdateBookmarkGroupRequestValidator : Validator<UpdateBookmarkGroupRequest>
 {
-    public RequestValidator()
+    public UpdateBookmarkGroupRequestValidator()
     {
         RuleFor(x => x.Id)
             .NotEmpty()

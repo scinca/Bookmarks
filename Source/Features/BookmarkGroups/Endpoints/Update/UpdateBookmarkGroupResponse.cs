@@ -1,6 +1,6 @@
-namespace Bookmarks.Features.BookmarkGroups.Endpoints.Update;
+namespace Bookmarks.Features.BookmarkGroups.Endpoints;
 
-public class Response
+public class UpdateBookmarkGroupResponse
 {
     public int GroupId {get; init;}
     public string Name {get; init;}

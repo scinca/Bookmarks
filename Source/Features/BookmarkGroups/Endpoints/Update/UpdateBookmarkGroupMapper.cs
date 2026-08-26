@@ -1,8 +1,8 @@
-namespace Bookmarks.Features.BookmarkGroups.Endpoints.Update;
+namespace Bookmarks.Features.BookmarkGroups.Endpoints;
 
-public class UpdateMapper : Mapper<Request, Response, BookmarkGroup>
+public class UpdateBookmarkGroupMapper : Mapper<UpdateBookmarkGroupRequest, UpdateBookmarkGroupResponse, BookmarkGroup>
 {
-    public override BookmarkGroup UpdateEntity(Request r, BookmarkGroup e)
+    public override BookmarkGroup UpdateEntity(UpdateBookmarkGroupRequest r, BookmarkGroup e)
     {
         if (r.Name is not null)
         {
@@ -17,9 +17,9 @@ public class UpdateMapper : Mapper<Request, Response, BookmarkGroup>
     }
 
 
-    public override Task<Response> FromEntityAsync(BookmarkGroup e, CancellationToken ct)
+    public override Task<UpdateBookmarkGroupResponse> FromEntityAsync(BookmarkGroup e, CancellationToken ct)
         => Task.FromResult(
-            new Response
+            new UpdateBookmarkGroupResponse
             {
                 GroupId = e.Id,
                 Name = e.Name,

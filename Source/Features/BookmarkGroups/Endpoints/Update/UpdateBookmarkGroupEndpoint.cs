@@ -1,6 +1,6 @@
-namespace Bookmarks.Features.BookmarkGroups.Endpoints.Update;
+namespace Bookmarks.Features.BookmarkGroups.Endpoints;
 
-public class Endpoint(AppDbContext context): Endpoint<Request, Response, UpdateMapper>
+public class UpdateBookmarkGroupEndpoint(AppDbContext context): Endpoint<UpdateBookmarkGroupRequest, UpdateBookmarkGroupResponse, UpdateBookmarkGroupMapper>
 {
     public override void Configure()
     {
@@ -8,7 +8,7 @@ public class Endpoint(AppDbContext context): Endpoint<Request, Response, UpdateM
         Description(x => x.WithName(GroupEndpoints.UpdateGroup));
     }
 
-    public override async Task HandleAsync(Request req, CancellationToken ct)
+    public override async Task HandleAsync(UpdateBookmarkGroupRequest req, CancellationToken ct)
     {
         var group = await context.BookmarkGroups.FindAsync([req.Id], cancellationToken: ct);
         Map.UpdateEntity(req, group!); // validator checks if Id is valid via AnyAsync
