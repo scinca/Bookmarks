@@ -8,10 +8,10 @@ namespace Tests.BookmarkGroups.CreateBookmarkGroupTests;
 public class DeleteBookmarkGroupsTests(App App) : TestBase<App>
 {
     
-    [Fact]
+    [Fact, Priority(1)]
     public async Task Delete_WithInvalidId_ShouldFail()
     {
-        var (rsp, res) = await App.UserAClient
+        var (rsp, _) = await App.UserAClient
                                   .DELETEAsync<DeleteBookmarkGroupEndpoint, DeleteBookmarkGroupRequest, EmptyResponse>(
                                       new()
                                       {
@@ -21,7 +21,7 @@ public class DeleteBookmarkGroupsTests(App App) : TestBase<App>
         rsp.StatusCode.ShouldBe(HttpStatusCode.NotFound);
     }
 
-    [Fact]
+    [Fact, Priority(2)]
     public async Task Delete_WithValidData_ShouldSucceed()
     {
 
@@ -57,7 +57,7 @@ public class DeleteBookmarkGroupsTests(App App) : TestBase<App>
         }
     }
     
-    [Fact]
+    [Fact, Priority(3)]
     public async Task Delete_FromOtherUser_ShouldFail()
     {
         const int id = 1000;
