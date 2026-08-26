@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace Bookmarks.Features.BookmarkGroups.Endpoints.GetById;
+namespace Bookmarks.Features.BookmarkGroups.Endpoints;
 
-public class Endpoint(AppDbContext context) : Endpoint<Request, Response>
+public class GetBookmarkGroupByIdEndpoint(AppDbContext context) : Endpoint<GetBookmarkGroupByIdRequest, GetBookmarkGroupByIdResponse>
 {
     
     public override void Configure()
@@ -11,13 +11,13 @@ public class Endpoint(AppDbContext context) : Endpoint<Request, Response>
         Description(x => x.WithName(GroupEndpoints.GetGroupById));
     }
 
-    public override async Task HandleAsync(Request req, CancellationToken ct)
+    public override async Task HandleAsync(GetBookmarkGroupByIdRequest req, CancellationToken ct)
     {
         var group = await context
                           .BookmarkGroups
                                  .AsNoTracking()
                                  .Where(g => g.Id == req.Id)
-                                 .Select(g => new Response
+                                 .Select(g => new GetBookmarkGroupByIdResponse
                                  {
                                      Id = g.Id,
                                      Name = g.Name,
