@@ -18,7 +18,6 @@ internal class CreateBookmarkGroupRequestValidator : Validator<CreateBookmarkGro
     public CreateBookmarkGroupRequestValidator()
     {
         RuleFor(x => x.Name)
-            .Cascade(CascadeMode.Stop)
             .NotEmpty().WithMessage("Name is required.")
             .MaximumLength(100).WithMessage("The name can not  exceed 100 characters");
         
