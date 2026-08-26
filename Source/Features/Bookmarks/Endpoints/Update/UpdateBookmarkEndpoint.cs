@@ -1,6 +1,6 @@
 namespace Bookmarks.Features.Bookmarks.Endpoints.Update;
 
-public class Endpoint(AppDbContext context) : Endpoint<Request, Response, UpdateMapper>
+public class UpdateBookmarkEndpoint(AppDbContext context) : Endpoint<UpdateBookmarkRequest, UpdateBookmarkResponse, UpdateBookmarkMapper>
 {
     public override void Configure()
     {
@@ -8,7 +8,7 @@ public class Endpoint(AppDbContext context) : Endpoint<Request, Response, Update
         Description(x => x.WithName(BookmarkEndpoints.UpdateBookmark));
     }
 
-    public override async Task HandleAsync(Request req, CancellationToken ct)
+    public override async Task HandleAsync(UpdateBookmarkRequest req, CancellationToken ct)
     {
         var bookmark = await context.Bookmarks.FindAsync([req.Id], cancellationToken: ct);
         

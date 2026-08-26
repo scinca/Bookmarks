@@ -1,8 +1,8 @@
 namespace Bookmarks.Features.Bookmarks.Endpoints.Update;
 
-public class UpdateMapper(LinkGenerator linkGenerator) : Mapper<Request, Response, Bookmark>
+public class UpdateBookmarkMapper(LinkGenerator linkGenerator) : Mapper<UpdateBookmarkRequest, UpdateBookmarkResponse, Bookmark>
 {
-    public override Bookmark UpdateEntity(Request r, Bookmark e)
+    public override Bookmark UpdateEntity(UpdateBookmarkRequest r, Bookmark e)
     {
         if (r.Name is not null)
         {
@@ -40,8 +40,8 @@ public class UpdateMapper(LinkGenerator linkGenerator) : Mapper<Request, Respons
     }
     
     
-    public override Task<Response> FromEntityAsync(Bookmark e, CancellationToken ct)
-        => Task.FromResult(new Response
+    public override Task<UpdateBookmarkResponse> FromEntityAsync(Bookmark e, CancellationToken ct)
+        => Task.FromResult(new UpdateBookmarkResponse
         {
             Url = linkGenerator.GetPathByName(
                 BookmarkEndpoints.GetById,

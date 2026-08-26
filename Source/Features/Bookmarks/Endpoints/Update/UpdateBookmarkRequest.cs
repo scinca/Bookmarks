@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bookmarks.Features.Bookmarks.Endpoints.Update;
 
-public class Request
+public class UpdateBookmarkRequest
 {
     [RouteParam]
     public int Id {get; init;}
@@ -23,9 +23,9 @@ public class Request
     public bool? GroupChanged { get; init; }
 }
 
-public class RequestValidator : Validator<Request>
+internal class UpdateBookmarkRequestValidator : Validator<UpdateBookmarkRequest>
 {
-    public RequestValidator()
+    public UpdateBookmarkRequestValidator()
     {
         RuleFor(request => request.Name)
             .Cascade(CascadeMode.Stop)

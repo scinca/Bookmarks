@@ -1,6 +1,6 @@
 namespace Bookmarks.Features.Bookmarks.Endpoints.Update;
 
-public class Response
+public class UpdateBookmarkResponse
 {
     public string? Url {get; init;}
 }
