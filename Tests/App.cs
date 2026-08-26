@@ -8,7 +8,9 @@ namespace Tests;
 public class App : AppFixture<Program>
 {
     public HttpClient UserAClient { get; private set; } = null!;
+    public string? UserAId { get; private set; }
     public HttpClient UserBClient { get; private set; } = null!;
+    public string? UserBId { get; private set; }
     
     protected override async ValueTask SetupAsync()
     {
@@ -17,9 +19,9 @@ public class App : AppFixture<Program>
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             await db.Database.EnsureCreatedAsync();
         }
-        
-        UserAClient = await CreateAuthenticatedClientAsync("user-a@test.com");
-        UserBClient = await CreateAuthenticatedClientAsync("user-b@test.com");
+
+        (UserAClient, UserAId) = await CreateAuthenticatedClientAsync("user-a@test.com");
+        (UserBClient, UserBId) = await CreateAuthenticatedClientAsync("user-b@test.com");
     }
 
     protected override void ConfigureApp(IWebHostBuilder a)
@@ -43,7 +45,7 @@ public class App : AppFixture<Program>
         await db.Database.EnsureDeletedAsync();
     }
     
-    public async Task<HttpClient> CreateAuthenticatedClientAsync(string email, string password = "A#1!StrongPassword")
+    public async Task<(HttpClient Client,string? UserId)> CreateAuthenticatedClientAsync(string email, string password = "A#1!StrongPassword")
     {
         using var anonymous = CreateClient();
         await anonymous.PostAsJsonAsync("api/auth/register", new { email, password });
@@ -51,6 +53,10 @@ public class App : AppFixture<Program>
         var loginResponse = await anonymous.PostAsJsonAsync("api/auth/login", new {email, password});
         var token = await loginResponse.Content.ReadFromJsonAsync<AccessTokenResponse>();
         
-        return CreateClient(c => c.DefaultRequestHeaders.Authorization= new("Bearer", token!.AccessToken));
+        using var scope = Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        var userId = db.Users.Where(u => u.Email == email).Select(u => u.Id).FirstOrDefault();
+        
+        return (CreateClient(c => c.DefaultRequestHeaders.Authorization= new("Bearer", token!.AccessToken)), userId);
     }
 }
