@@ -86,7 +86,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, ICurrentUserSe
 
             entity.Property(e => e.LastModifiedAt)
                   .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                  .ValueGeneratedOnAddOrUpdate();
+                  .ValueGeneratedOnAdd();
 
             entity.HasOne(e => e.Owner)
                   .WithMany()
