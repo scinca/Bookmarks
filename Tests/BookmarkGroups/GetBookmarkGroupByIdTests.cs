@@ -11,11 +11,14 @@ public class GetBookmarkGroupByIdTests(App App) : TestBase<App>
     [Fact, Priority(1)]
     public async Task InvalidGroupId_ShouldFail()
     {
-        var (rsp, _) = await App.UserAClient.GETAsync<GetBookmarkByIdEndpoint, GetBookmarkGroupByIdRequest,GetBookmarkGroupByIdResponse>(new()
-        {
-            Id = int.MinValue,
-        });
-        
+        var (rsp, _) = await App.UserAClient
+                                .GETAsync<GetBookmarkByIdEndpoint, GetBookmarkGroupByIdRequest,
+                                    GetBookmarkGroupByIdResponse>(
+                                    new()
+                                    {
+                                        Id = int.MinValue,
+                                    });
+
         rsp.StatusCode.ShouldBe(HttpStatusCode.NotFound);
     }
 
@@ -33,7 +36,7 @@ public class GetBookmarkGroupByIdTests(App App) : TestBase<App>
             CreatedAt = DateTime.UnixEpoch,
             OwnerId = App.UserAId!,
         };
-        
+
         using (var scope = App.Services.CreateScope())
         {
             var db = App.Services.GetRequiredService<AppDbContext>();
@@ -41,12 +44,15 @@ public class GetBookmarkGroupByIdTests(App App) : TestBase<App>
             await db.SaveChangesAsync(TestContext.Current.CancellationToken);
         }
 
-        var (rsp, res) = await App.UserAClient.GETAsync<GetBookmarkGroupByIdEndpoint, GetBookmarkGroupByIdRequest, GetBookmarkGroupByIdResponse>(new()
-        {
-            Id = id,
-        });
+        var (rsp, res) = await App.UserAClient
+                                  .GETAsync<GetBookmarkGroupByIdEndpoint, GetBookmarkGroupByIdRequest,
+                                      GetBookmarkGroupByIdResponse>(
+                                      new()
+                                      {
+                                          Id = id,
+                                      });
 
-        rsp.StatusCode.ShouldBe(HttpStatusCode.OK);   
+        rsp.StatusCode.ShouldBe(HttpStatusCode.OK);
         res.Id.ShouldBe(id);
         res.Name.ShouldBe(testGroup.Name);
         res.Description.ShouldBe(testGroup.Description);
@@ -58,20 +64,22 @@ public class GetBookmarkGroupByIdTests(App App) : TestBase<App>
     {
 
         const int groupId = 1492;
-        
+
         using (var scope = App.Services.CreateScope())
         {
             var db = App.Services.GetRequiredService<AppDbContext>();
-            db.BookmarkGroups.Add(new()
-            {
-                Id = groupId,
-                Name = Guid.CreateVersion7().ToString(),
-                Description = null,
-                CreatedAt = DateTime.UtcNow,
-                OwnerId = App.UserBId!,
-            });
+            db.BookmarkGroups.Add(
+                new()
+                {
+                    Id = groupId,
+                    Name = Guid.CreateVersion7().ToString(),
+                    Description = null,
+                    CreatedAt = DateTime.UtcNow,
+                    OwnerId = App.UserBId!,
+                });
 
-            db.Bookmarks.Add(new()
+            db.Bookmarks.Add(
+                new()
                 {
                     Id = 10000,
                     Name = Guid.CreateVersion7().ToString(),
@@ -83,18 +91,50 @@ public class GetBookmarkGroupByIdTests(App App) : TestBase<App>
                     OwnerId = App.UserBId!,
                     GroupId = groupId,
                 });
-            
+
             await db.SaveChangesAsync(TestContext.Current.CancellationToken);
         }
-        
-        var (rsp, responseDto) = await App.UserBClient.GETAsync<GetBookmarkGroupByIdEndpoint, GetBookmarkGroupByIdRequest, GetBookmarkGroupByIdResponse>(new()
-        { 
-            Id = groupId,
-        });
-        
+
+        var (rsp, responseDto) = await App.UserBClient
+                                          .GETAsync<GetBookmarkGroupByIdEndpoint, GetBookmarkGroupByIdRequest,
+                                              GetBookmarkGroupByIdResponse>(
+                                              new()
+                                              {
+                                                  Id = groupId,
+                                              });
+
         rsp.StatusCode.ShouldBe(HttpStatusCode.OK);
         responseDto.Id.ShouldBe(groupId);
         responseDto.Bookmarks.Count.ShouldBe(1);
     }
-    
+
+    [Fact, Priority(4)]
+    public async Task AccessingGroup_FromOtherPeople_ShouldFail()
+    {
+
+        const int groupId = 5000;
+
+        using (var scope = App.Services.CreateScope())
+        {
+            var db = App.Services.GetRequiredService<AppDbContext>();
+            db.BookmarkGroups.Add(
+                new()
+                {
+                    Id = groupId,
+                    Name = Guid.CreateVersion7().ToString(),
+                    Description = null,
+                    CreatedAt = DateTime.UtcNow,
+                    OwnerId = App.UserBId!,
+                });
+            await db.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+        
+        var (rsp, _) = await App.UserAClient.GETAsync<GetBookmarkGroupByIdEndpoint, GetBookmarkGroupByIdRequest,
+                           GetBookmarkGroupByIdResponse>(
+                           new()
+                           {
+                               Id = groupId,
+                           });
+            rsp.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+    }
 }
