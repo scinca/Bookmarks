@@ -25,13 +25,13 @@ public class Bookmark
 }
 
 
-public static class BookmarkEndpoints
+public static class BookmarkEndpointNames
 {
-    public const string CreateBookmark = "CreateBookmark";
-    public const string DeleteBookmark =  "DeleteBookmark";
-    public const string EmptyTrash =  "EmptyTrash";
-    public const string GetAll =  "GetAll";
-    public const string GetById =  "GetById";
-    public const string Trash = "Trash";
-    public const string UpdateBookmark =  "UpdateBookmark";
+    public const string CreateBookmark = nameof(CreateBookmark);
+    public const string DeleteBookmark =  nameof(DeleteBookmark);
+    public const string EmptyTrash =  nameof(EmptyTrash);
+    public const string GetAll =  nameof(GetAll);
+    public const string GetById =  nameof(GetById);
+    public const string Trash = nameof(Trash);
+    public const string UpdateBookmark =  nameof(UpdateBookmark);
 }

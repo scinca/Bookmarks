@@ -17,11 +17,11 @@ public class BookmarkGroup
 }
 
 
-public static class GroupEndpoints
+public static class BookmarkGroupEndpointNames
 {
-    public const string GetGroupById = "GetGroupById";
-    public const string DeleteGroup = "DeleteGroup";
-    public const string GetAll = "GetAllGroups";
-    public const string UpdateGroup = "UpdateGroup";
-    public const string CreateGroup =  "CreateGroup";
+    public const string GetGroupById = nameof(GetGroupById);
+    public const string DeleteGroup = nameof(DeleteGroup);
+    public const string GetAllGroups = nameof(GetAllGroups);
+    public const string UpdateGroup = nameof(UpdateGroup);
+    public const string CreateGroup =  nameof(CreateGroup);
 }
