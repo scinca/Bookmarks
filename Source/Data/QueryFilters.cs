@@ -2,7 +2,7 @@ namespace Bookmarks;
 
 static class QueryFilters
 {
-    public const string UserFilter = "A";
-    public const string SoftDeletionFilter = "B";
-    public const string ArchivedFilter = "C";
+    public const string UserFilter = nameof(UserFilter);
+    public const string SoftDeletionFilter = nameof(SoftDeletionFilter);
+    public const string ArchivedFilter = nameof(ArchivedFilter);
 }
