@@ -1,11 +1,9 @@
 using Bookmarks.Features.BookmarkGroups;
-using Bookmarks.Features.User;
 
 namespace Bookmarks.Features.Bookmarks;
 
-public class Bookmark
+public class Bookmark :  Entity
 {
-    public int Id {get; init;}
     public required string Name {get; set;}
     public  required string Url {get; set;}
     public string? Description {get; set;}
@@ -17,9 +15,7 @@ public class Bookmark
 
     public DateTime CreatedAt { get; init; }
     public DateTime LastModifiedAt {get; set;}
-
-    public ApplicationUser Owner { get; init; } = null!;
-    public required string OwnerId {get; init;}
+    
     public BookmarkGroup? Group { get; init; }
     public int? GroupId {get; set;}
 }
