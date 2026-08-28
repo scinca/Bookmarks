@@ -5,7 +5,7 @@ public class DeleteBookmarkEndpoint(AppDbContext context): Endpoint<DeleteBookma
     public override void Configure()
     {
         Delete("/bookmark/{Id:int}");
-        Description(x => x.WithName(BookmarkEndpoints.DeleteBookmark));
+        Description(x => x.WithName(BookmarkEndpointNames.DeleteBookmark));
     }
 
     public override async Task HandleAsync(DeleteBookmarkResponse req, CancellationToken ct)

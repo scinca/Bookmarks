@@ -8,7 +8,7 @@ public class GetBookmarkGroupByIdEndpoint(AppDbContext context) : Endpoint<GetBo
     public override void Configure()
     {
         Get("/group/{Id:int}");
-        Description(x => x.WithName(GroupEndpoints.GetGroupById));
+        Description(x => x.WithName(BookmarkGroupEndpointNames.GetGroupById));
     }
 
     public override async Task HandleAsync(GetBookmarkGroupByIdRequest req, CancellationToken ct)

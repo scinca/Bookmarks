@@ -44,7 +44,7 @@ public class UpdateBookmarkMapper(LinkGenerator linkGenerator) : Mapper<UpdateBo
         => Task.FromResult(new UpdateBookmarkResponse
         {
             Url = linkGenerator.GetPathByName(
-                BookmarkEndpoints.GetById,
+                BookmarkEndpointNames.GetById,
                 new() { ["Id"] = e.Id })
         });
 }

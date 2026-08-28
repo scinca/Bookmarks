@@ -8,7 +8,7 @@ public class DeleteBookmarkGroupEndpoint(AppDbContext context): Endpoint<DeleteB
     {
         Delete("/group/{Id:int}");
         Description(x =>
-            x.WithName(GroupEndpoints.DeleteGroup));
+            x.WithName(BookmarkGroupEndpointNames.DeleteGroup));
     }
 
     public override async Task HandleAsync(DeleteBookmarkGroupRequest req, CancellationToken ct)

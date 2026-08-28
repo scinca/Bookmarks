@@ -7,7 +7,7 @@ public class GetBookmarkByIdEndpoint(AppDbContext context) : Endpoint<GetBookmar
     public override void Configure()
     {
         Get("/bookmark/{Id:int}");
-        Description(x => x.WithName(BookmarkEndpoints.GetById));
+        Description(x => x.WithName(BookmarkEndpointNames.GetById));
     }
 
     public override async Task HandleAsync(GetBookmarkByIdRequest req, CancellationToken ct)

@@ -6,7 +6,7 @@ public class CreateBookmarkEndpoint(AppDbContext context): Endpoint<CreateBookma
     public override void Configure()
     {
         Post("/bookmark");
-        Description(x => x.WithName(BookmarkEndpoints.CreateBookmark));
+        Description(x => x.WithName(BookmarkEndpointNames.CreateBookmark));
     }
 
     public override async Task HandleAsync(CreateBookmarkRequest req, CancellationToken ct)

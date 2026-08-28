@@ -5,7 +5,7 @@ public class UpdateBookmarkEndpoint(AppDbContext context) : Endpoint<UpdateBookm
     public override void Configure()
     {
         Patch("/bookmark");
-        Description(x => x.WithName(BookmarkEndpoints.UpdateBookmark));
+        Description(x => x.WithName(BookmarkEndpointNames.UpdateBookmark));
     }
 
     public override async Task HandleAsync(UpdateBookmarkRequest req, CancellationToken ct)

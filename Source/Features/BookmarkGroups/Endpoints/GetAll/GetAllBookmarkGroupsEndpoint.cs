@@ -8,7 +8,7 @@ public class GetAllBookmarkGroupsEndpoint(AppDbContext context) : EndpointWithou
     {
         Get("/group");
         Description(x =>
-            x.WithName(GroupEndpoints.GetAll));
+            x.WithName(BookmarkGroupEndpointNames.GetAllGroups));
     }
 
     public override async Task HandleAsync(CancellationToken ct)

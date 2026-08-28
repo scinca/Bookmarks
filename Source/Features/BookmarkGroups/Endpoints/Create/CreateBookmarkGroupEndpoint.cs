@@ -7,7 +7,7 @@ public class CreateBookmarkGroupEndpoint(AppDbContext context): Endpoint<CreateB
     public override void Configure()
     {
         Post("/group");
-        Description(x => x.WithName(GroupEndpoints.CreateGroup));
+        Description(x => x.WithName(BookmarkGroupEndpointNames.CreateGroup));
     }
 
     public override async Task HandleAsync(CreateBookmarkGroupRequest req, CancellationToken ct)

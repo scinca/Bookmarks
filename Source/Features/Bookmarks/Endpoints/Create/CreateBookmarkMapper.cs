@@ -17,7 +17,7 @@ public class CreateBookmarkMapper(LinkGenerator linkGenerator) : Mapper<CreateBo
             new CreateBookmarkResponse
             {
                 Url = linkGenerator.GetPathByName(
-                    BookmarkEndpoints.GetById,
+                    BookmarkEndpointNames.GetById,
                     new() { ["Id"] = e.Id })
             });
 }

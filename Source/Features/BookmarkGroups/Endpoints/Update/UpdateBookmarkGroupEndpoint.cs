@@ -5,7 +5,7 @@ public class UpdateBookmarkGroupEndpoint(AppDbContext context): Endpoint<UpdateB
     public override void Configure()
     {
         Patch("/group/{Id:int}");
-        Description(x => x.WithName(GroupEndpoints.UpdateGroup));
+        Description(x => x.WithName(BookmarkGroupEndpointNames.UpdateGroup));
     }
 
     public override async Task HandleAsync(UpdateBookmarkGroupRequest req, CancellationToken ct)

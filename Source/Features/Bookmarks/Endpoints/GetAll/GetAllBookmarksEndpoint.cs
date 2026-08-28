@@ -8,7 +8,7 @@ public class GetAllBookmarksEndpoint(AppDbContext context, LinkGenerator linkGen
     public override void Configure()
     {
         Get("/bookmark");
-        Description(x => x.WithName(BookmarkEndpoints.GetAll));
+        Description(x => x.WithName(BookmarkEndpointNames.GetAll));
     }
 
     public override async Task HandleAsync(GetAllBookmarksRequest req, CancellationToken ct)
@@ -64,7 +64,7 @@ public class GetAllBookmarksEndpoint(AppDbContext context, LinkGenerator linkGen
             req.PageSize,
             bookmarks,
             totalCount,
-            BookmarkEndpoints.GetAll,
+            BookmarkEndpointNames.GetAll,
             routeValues);
 
         await Send.OkAsync(response: response, cancellation: ct);
