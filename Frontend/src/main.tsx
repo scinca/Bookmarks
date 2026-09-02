@@ -4,6 +4,8 @@ import {BrowserRouter} from "react-router"
 import './index.css'
 import App from './App.tsx'
 
+import '@fontsource-variable/source-sans-3/wght.css';
+
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <BrowserRouter>
