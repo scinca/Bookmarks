@@ -26,50 +26,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, ICurrentUserSe
         builder.Entity<BookmarkGroup>().HasQueryFilter(QueryFilters.UserFilter ,e => e.OwnerId == currentUser.Id);
 
         
-    #region Bookmark
+        new BookmarkEntityTypeConfiguration().Configure(builder.Entity<Bookmark>());
         builder.Entity<Bookmark>(entity =>
         {
-            entity.Property(e => e.Name)
-                  .HasMaxLength(2048)
-                  .IsRequired();
-
-            entity.Property(e => e.Url)
-                  .HasMaxLength(2048)
-                  .IsRequired();
-
-            entity.Property(e => e.Description)
-                  .HasMaxLength(500)
-                  .HasDefaultValue(null);
-
-            entity.Property(e => e.IsArchived)
-                  .HasDefaultValue(false);
-
-            entity.Property(e => e.IsFavourite)
-                  .HasDefaultValue(false);
-            
-            entity.Property(e => e.IsDeleted)
-                  .HasDefaultValue(false);
-            
-            entity.Property(e => e.CreatedAt)
-                  .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                  .ValueGeneratedOnAdd();
-
-            entity.Property(e => e.LastModifiedAt)
-                  .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                  .ValueGeneratedOnAdd();
-
-            entity.HasOne(e => e.Owner)
-                  .WithMany()
-                  .HasForeignKey(e => e.OwnerId)
-                  .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasIndex(e => new { e.OwnerId, e.Name, e.Url })
-                  .IsUnique();
-            
             entity.HasQueryFilter(QueryFilters.UserFilter ,e => e.OwnerId == currentUser.Id);
             entity.HasQueryFilter(QueryFilters.SoftDeletionFilter, e => e.IsDeleted == false);
             entity.HasQueryFilter(QueryFilters.ArchivedFilter, e => e.IsArchived == false);
         });
-    #endregion
     }
 } 
