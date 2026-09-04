@@ -1,4 +1,6 @@
 using Bookmarks.Features.Bookmarks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Bookmarks.Features.BookmarkGroups;
 
@@ -9,6 +11,39 @@ public class BookmarkGroup : Entity
     public DateTime CreatedAt { get; init; }
 
     public IReadOnlyCollection<Bookmark> Bookmarks { get; init; } = null!;
+}
+
+
+public class BookmarkGroupEntityTypeConfiguration : IEntityTypeConfiguration<BookmarkGroup>
+{
+    public void Configure(EntityTypeBuilder<BookmarkGroup> entity)
+    {
+            entity.Property(e => e.Name)
+                  .HasMaxLength(100)
+                  .IsRequired();
+
+            entity.Property(e => e.CreatedAt)
+                  .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                  .ValueGeneratedOnAdd();
+
+            entity.Property(e => e.Description)
+                  .HasMaxLength(500)
+                  .HasDefaultValue(null);
+            
+            
+            entity.HasOne(e => e.Owner)
+                  .WithMany()
+                  .HasForeignKey(e => e.OwnerId)
+                  .OnDelete(DeleteBehavior.Cascade);
+                
+            entity.HasMany(e => e.Bookmarks)
+                  .WithOne(e => e.Group)
+                  .HasForeignKey(e => e.GroupId)
+                  .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasIndex(e => new { e.OwnerId ,e.Name })
+                  .IsUnique();
+    }
 }
 
 

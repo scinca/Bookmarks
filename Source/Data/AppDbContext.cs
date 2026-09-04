@@ -22,38 +22,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, ICurrentUserSe
     {
         base.OnModelCreating(builder);
 
-    #region BookmarkGroup
-        builder.Entity<BookmarkGroup>(entity =>
-        {
-            entity.Property(e => e.Name)
-                  .HasMaxLength(100)
-                  .IsRequired();
+        new BookmarkGroupEntityTypeConfiguration().Configure(builder.Entity<BookmarkGroup>());
+        builder.Entity<BookmarkGroup>().HasQueryFilter(QueryFilters.UserFilter ,e => e.OwnerId == currentUser.Id);
 
-            entity.Property(e => e.CreatedAt)
-                  .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                  .ValueGeneratedOnAdd();
-
-            entity.Property(e => e.Description)
-                  .HasMaxLength(500)
-                  .HasDefaultValue(null);
-            
-            
-            entity.HasOne(e => e.Owner)
-                  .WithMany()
-                  .HasForeignKey(e => e.OwnerId)
-                  .OnDelete(DeleteBehavior.Cascade);
-                
-            entity.HasMany(e => e.Bookmarks)
-                  .WithOne(e => e.Group)
-                  .HasForeignKey(e => e.GroupId)
-                  .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasIndex(e => new { e.OwnerId ,e.Name })
-                  .IsUnique();
-
-            entity.HasQueryFilter(QueryFilters.UserFilter ,e => e.OwnerId == currentUser.Id);
-        });
-    #endregion
         
     #region Bookmark
         builder.Entity<Bookmark>(entity =>
